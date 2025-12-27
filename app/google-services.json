@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "434538089351",
+    "project_id": "scrapuncleauth",
+    "storage_bucket": "scrapuncleauth.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:434538089351:android:093a7f1568076df8dca122",
+        "android_client_info": {
+          "package_name": "com.example.scrapuncle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "434538089351-2t17cb83e3l581ardresl0gacdu5luim.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDO9-x7-J-TtppSx6fOj--jO1eXzgcJEGA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "434538089351-2t17cb83e3l581ardresl0gacdu5luim.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
