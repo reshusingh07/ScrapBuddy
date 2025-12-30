@@ -91,6 +91,7 @@ dependencies {
     implementation(libs.androidx.navigation.common.ktx)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.foundation)
+    implementation(libs.androidx.ui)
 
 //    implementation(libs.androidx.compose.foundation.layout)
 

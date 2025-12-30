@@ -16,12 +16,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
-val bottomTabs = listOf(
-    Screen.Home,
-    Screen.Rate,
-    Screen.Schedule,
-    Screen.Profile
-)
 
 @Composable
 fun BottomNavBar(
@@ -31,51 +25,38 @@ fun BottomNavBar(
     val currentRoute = currentBackStackEntry?.destination?.route
 
     NavigationBar(
-        containerColor = Color.White,
-        tonalElevation = 0.dp
+        containerColor = Color.White, tonalElevation = 0.dp
     ) {
-        bottomTabs.forEach { screen ->
+        bottomTabs.forEach { tab ->
 
-            val selected = currentRoute == screen.route
+            val selected = currentRoute == tab.route
 
             NavigationBarItem(
-                selected = selected,
-                onClick = {
-                    navController.navigate(screen.route) {
-
-                        // 🔥 THIS IS CRITICAL
+                selected = selected, onClick = {
+                    navController.navigate(tab.route) {
                         popUpTo(navController.graph.startDestinationId) {
                             saveState = true
                         }
-
                         launchSingleTop = true
                         restoreState = true
                     }
                 },
                 icon = {
                     Icon(
-                        painter = painterResource(screen.iconResId!!),
-                        contentDescription = screen.label,
-                        modifier = Modifier
-                            .size(20.dp),
-                        tint = if (selected)
-                            Color(0xFF00A651)
-                        else
-                            Color.Black.copy(alpha = 0.7f)
+                        imageVector = if (selected) tab.filledIcon
+                        else tab.outlinedIcon, contentDescription = tab.label
                     )
                 },
                 label = {
                     Text(
-                        text = screen.label,
-                        fontSize = 10.sp,
-                        color = if (selected)
-                            Color(0xFF00A651)
-                        else
-                            Color(0xFF94A3B8)
+                        text = tab.label,
                     )
                 },
-                alwaysShowLabel = true,
-                colors = NavigationBarItemDefaults.colors(
+                alwaysShowLabel = true, colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = Color(0xFF00A651),
+                    selectedTextColor = Color(0xFF00A651),
+                    unselectedIconColor = Color(0xFF64748B),
+                    unselectedTextColor = Color(0xFF64748B),
                     indicatorColor = Color.Transparent
                 )
             )

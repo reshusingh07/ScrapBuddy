@@ -68,6 +68,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -227,12 +228,16 @@ private fun StickyFab(
     loading: Boolean,
     onClick: () -> Unit
 ) {
-    if (!isKeyboardOpen) return
-
+ 
     FloatingActionButton(
         onClick = onClick,
         modifier = Modifier
-            .imePadding(),
+            .imePadding()
+            .graphicsLayer {
+                alpha = if (isKeyboardOpen) 1f else 0f
+                scaleX = if (isKeyboardOpen) 1f else 0.85f
+                scaleY = if (isKeyboardOpen) 1f else 0.85f
+            },
         shape = RoundedCornerShape(50),
         contentColor = White,
         containerColor = lightGreen,

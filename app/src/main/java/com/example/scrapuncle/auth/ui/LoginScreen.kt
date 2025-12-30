@@ -35,7 +35,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -47,6 +46,7 @@ import com.example.scrapuncle.auth.uistate.AuthState
 import com.example.scrapuncle.auth.viewmodel.AuthViewModel
 import com.example.scrapuncle.ui.theme.lightBlack
 import com.example.scrapuncle.ui.theme.lightGreen
+import com.example.scrapuncle.ui.theme.poppinsCategoryFont
 
 
 @Composable
@@ -65,13 +65,9 @@ fun LoginScreen(
     val isLoading = uiState is AuthState.Loading
     val isButtonEnabled = viewModel.canStartVerification() && !isLoading
 
-    val keyboardController = LocalSoftwareKeyboardController.current
 
-    LaunchedEffect(isLoading) {
-        if (isLoading) {
-            keyboardController?.hide()
-        }
-    }
+
+
 
     LaunchedEffect(uiState) {
         if (uiState is AuthState.CodeSent) {
@@ -121,58 +117,55 @@ fun LoginScreen(
 //            Spacer(modifier = Modifier.height(2.dp))
 
 
-                OutlinedTextField(
-                    value = phone,
-                    onValueChange = viewModel::onPhoneChanged,
-                    enabled = !isLoading,
-                    singleLine = true,
-                    label = {
+            OutlinedTextField(
+                value = phone,
+                onValueChange = viewModel::onPhoneChanged,
+                enabled = !isLoading,
+                singleLine = true,
+                label = {
+                    Text(
+                        "Phone number",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = Color(0xFF333333)
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(36.dp),
+                shape = MaterialTheme.shapes.small,
+                leadingIcon = {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(start = 4.dp)
+                    ) {
                         Text(
-                            "Phone number",
-                            style = MaterialTheme.typography.labelMedium,
-                            color = Color(0xFF333333)
+                            text = "+91",
+                            fontSize = 15.sp,
+                            color = lightBlack,
+                            modifier = Modifier.padding(horizontal = 6.dp)
                         )
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                        .heightIn(36.dp),
-                    shape = MaterialTheme.shapes.small,
-                    leadingIcon = {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(start = 4.dp)
-                        ) {
-                            Text(
-                                text = "+91",
-                                fontSize = 15.sp,
-                                color = lightBlack,
-                                modifier = Modifier.padding(horizontal = 6.dp)
-                            )
 
-                            Box(
-                                modifier = Modifier
-                                    .width(1.dp)
-                                    .height(24.dp)
-                                    .background(Color.LightGray)
-                            )
-                            Spacer(Modifier.width(10.dp))
-                        }
-                    },
-                    colors = OutlinedTextFieldDefaults.colors(
-                        disabledTextColor = Color.Gray,
-                        disabledBorderColor = Color.LightGray,
-                        disabledLabelColor = Color.Gray
-                    )
-                    ,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Done
-                    )
+                        Box(
+                            modifier = Modifier
+                                .width(1.dp)
+                                .height(24.dp)
+                                .background(Color.LightGray)
+                        )
+                        Spacer(Modifier.width(10.dp))
+                    }
+                },
+                colors = inputColors(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
                 )
+            )
 
             //  Error text under field
             if (uiState is AuthState.Error) {
                 Text(
                     text = (uiState as AuthState.Error).message,
+                    fontFamily = poppinsCategoryFont,
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier
@@ -185,17 +178,19 @@ fun LoginScreen(
             Button(
                 onClick = {
                     activity?.let {
-                    viewModel.startPhoneVerification(it)
-                }},
+                        viewModel.startPhoneVerification(it)
+                    }
+                },
                 enabled = isButtonEnabled,
                 modifier = Modifier
-                    .fillMaxWidth(0.92f)
+                    .fillMaxWidth(0.98f)
                     .heightIn(44.dp),
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(18.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = lightGreen,
-                    disabledContainerColor = lightGreen
-                )
+                    disabledContainerColor = lightGreen,
+
+                    )
             ) {
                 if (isLoading) {
                     CircularProgressIndicator(
@@ -216,6 +211,7 @@ fun LoginScreen(
 
             Text(
                 text = "By continuing, you agree to our Terms & Privacy\nPolicy.",
+                fontFamily = poppinsCategoryFont,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
             )

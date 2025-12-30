@@ -21,19 +21,3 @@ data class ScheduleUiState(
     val success: Boolean = false
 )
 
-
-//data class ScheduleUiState(
-//    val isLoading: Boolean = false,
-//    val isSubmitting: Boolean = false,
-//
-//    val selectedDate: LocalDate = LocalDate.now(),
-//    val selectedSlot: String? = null,
-//    val selectedWeight: String? = null,
-//    val selectedAddressId: String? = null,
-//
-//    val addresses: List<Address> = emptyList(),
-//    val pickups: List<PickupWithAddress> = emptyList(),
-//
-//    val error: String? = null,
-//    val success: Boolean = false
-//)

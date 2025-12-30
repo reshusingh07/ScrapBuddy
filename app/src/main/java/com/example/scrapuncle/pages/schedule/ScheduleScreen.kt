@@ -1,5 +1,6 @@
 package com.example.scrapuncle.pages.schedule
 
+import android.util.Log
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -48,7 +49,9 @@ private enum class UiMode {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ScheduleScreen(
-    viewModel: ScheduleViewModel = hiltViewModel(), onScheduleNow: () -> Unit
+    viewModel: ScheduleViewModel = hiltViewModel(),
+    onPickupClick: (String) -> Unit,
+    onScheduleNow: () -> Unit
 ) {
     val state = viewModel.uiState.collectAsState().value
     val items = state.pickups
@@ -61,7 +64,7 @@ fun ScheduleScreen(
 
     val shimmerBrush = rememberShimmerBrush()
 
-
+//      println(  state.selectedWeight)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -111,6 +114,7 @@ fun ScheduleScreen(
                             items(items) { item ->
                                 val pickup = item.pickup
                                 val formatted = formatAddress(item.address)
+                                Log.d("Pickup", pickup.weight)
 
                                 // animate placement so item changes are smooth
                                 PickupCard(
@@ -118,7 +122,10 @@ fun ScheduleScreen(
                                     address = formatted,
                                     pid = pickup.id,
                                     slot = pickup.slot,
-                                    status = pickup.status
+                                    status = pickup.status,
+                                    onClick = {
+                                        onPickupClick(pickup.id)
+                                    }
                                 )
                             }
                         }

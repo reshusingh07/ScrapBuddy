@@ -1,5 +1,7 @@
 package com.example.scrapuncle.auth.ui
 
+import android.R.attr.scaleX
+import android.R.attr.scaleY
 import android.widget.Toast
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -44,6 +46,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -85,13 +88,7 @@ fun CreateProfileScreen(
     val keyboardOpen = isKeyboardOpen()
 
 
-    val keyboardController = LocalSoftwareKeyboardController.current
 
-    LaunchedEffect(uiState.submissionInProgress) {
-        if (uiState.submissionInProgress) {
-            keyboardController?.hide()
-        }
-    }
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
@@ -157,12 +154,17 @@ private fun StickyFab(
     loading: Boolean,
     onClick: () -> Unit
 ) {
-    if (!isKeyboardOpen) return
+//    if (!isKeyboardOpen) return
 
     FloatingActionButton(
         onClick = onClick,
         modifier = Modifier
-            .imePadding(),
+            .imePadding()
+            .graphicsLayer {
+            alpha = if (isKeyboardOpen) 1f else 0f
+            scaleX = if (isKeyboardOpen) 1f else 0.85f
+            scaleY = if (isKeyboardOpen) 1f else 0.85f
+        },
         shape = RoundedCornerShape(50.dp),
 
         containerColor = Color(0xFF00A651)

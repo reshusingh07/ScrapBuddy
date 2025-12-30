@@ -41,8 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.painterResource
+ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -56,6 +55,7 @@ import com.example.scrapuncle.auth.viewmodel.AuthViewModel
 import com.example.scrapuncle.auth.viewmodel.OtpViewModel
 import com.example.scrapuncle.ui.theme.lightBlack
 import com.example.scrapuncle.ui.theme.lightGreen
+import com.example.scrapuncle.ui.theme.poppinsCategoryFont
 import kotlin.math.roundToInt
 
 
@@ -76,20 +76,10 @@ fun OtpScreen(
 
     val isLoading = uiState.isLoading || authState is AuthState.Loading
 
-    val keyboardController = LocalSoftwareKeyboardController.current
 
-    LaunchedEffect(isLoading) {
-        if (isLoading) {
-            keyboardController?.hide()
-        }
-    }
 
-//    LaunchedEffect(Unit) {
-//        kotlinx.coroutines.delay(200)
-//
-//        focusRequesters.first().requestFocus()
-//        keyboardController?.show()
-//    }
+
+
 
     LaunchedEffect(authState) {
         when (authState) {
@@ -107,12 +97,7 @@ fun OtpScreen(
         }
     }
 
-//    LaunchedEffect(otpUiState.error) {
-//        if (otpUiState.error != null) {
-//            focusRequesters.first().requestFocus()
-//            keyboardController?.show()
-//        }
-//    }
+
 
 
 
@@ -217,7 +202,7 @@ fun OtpScreen(
                 modifier = Modifier
                     .fillMaxWidth(0.94f)
                     .heightIn(44.dp),
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(18.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = lightGreen,
                     disabledContentColor = lightGreen
@@ -242,6 +227,7 @@ fun OtpScreen(
 
             Text(
                 text = "Didn't you receive any code?",
+                fontFamily = poppinsCategoryFont,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = Color.Black.copy(alpha = 0.4f),

@@ -6,7 +6,7 @@ data class Pickup(
     val id: String = "",
     val date: String = "",
     val slot: String = "",
-    val weightRange: String = "",
+    val weight: String = "",
     val addressId: String = "",
     val status: String = "",
     val userId: String = "",

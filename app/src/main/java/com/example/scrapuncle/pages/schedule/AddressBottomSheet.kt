@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.scrapuncle.auth.data.Address
 import com.example.scrapuncle.ui.theme.lightBlack
+import com.example.scrapuncle.ui.theme.poppinsCategoryFont
 import com.google.common.math.LinearTransformation.horizontal
 
 
@@ -105,6 +106,7 @@ fun AddressBottomSheet(
                     ) {
                         Text(
                             text = "Select Address",
+                            fontFamily = poppinsCategoryFont,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.DarkGray.copy(alpha = 0.9f),

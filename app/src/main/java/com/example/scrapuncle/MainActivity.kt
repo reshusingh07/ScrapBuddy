@@ -16,12 +16,14 @@ import com.example.scrapuncle.auth.ui.AddAddressScreen
 import com.example.scrapuncle.auth.ui.CreateProfileScreen
 import com.example.scrapuncle.auth.ui.LoginScreen
 import com.example.scrapuncle.auth.ui.OtpScreen
+import com.example.scrapuncle.auth.ui.WelcomeScreen
 import com.example.scrapuncle.auth.viewmodel.AddAddressViewModel
 import com.example.scrapuncle.auth.viewmodel.AuthViewModel
 import com.example.scrapuncle.auth.viewmodel.ProfileViewModel
 import com.example.scrapuncle.auth.viewmodel.ScheduleViewModel
 import com.example.scrapuncle.navigation.AppNavGraph
- import com.example.scrapuncle.ui.theme.ScrapUncleTheme
+import com.example.scrapuncle.pages.HomeScreen
+import com.example.scrapuncle.ui.theme.ScrapUncleTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -49,6 +51,9 @@ class MainActivity : ComponentActivity() {
                              authViewModel = authViewModel
                          )
 
+
+//                 WelcomeScreen {  }
+
                     val  profileViewModel : ProfileViewModel = hiltViewModel()
 //
 //                     CreateProfileScreen(
@@ -61,23 +66,7 @@ class MainActivity : ComponentActivity() {
                      val addressViewModel : AddAddressViewModel = hiltViewModel()
                      val scheduleViewModel: ScheduleViewModel = hiltViewModel()
 
-//                     CreateProfileScreen1(
-//                         viewModel = addressViewModel,
-//                         scheduleViewModel = scheduleViewModel,
-//                         onSchedulePickup = {
-//                             navController.navigate("home")
-//                         }
-//                     )
 
-
-//                     OtpScreen(
-//                         authViewModel = authViewModel,
-//                         onNavigateToCreateProfile = {
-//                             navController.navigate("create_profile")
-//                         }
-//                     )
-
-//                 }
 
 
 

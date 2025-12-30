@@ -186,6 +186,12 @@ class ScheduleViewModel @Inject constructor(
 //        selectedAddressId = address.id
 //    }
 
+    fun getPickupById(pid: String): PickupWithAddress? {
+        return uiState.value.pickups
+            .firstOrNull { it.pickup.id == pid }
+    }
+
+
 
     fun loadAddresses() {
         viewModelScope.launch {

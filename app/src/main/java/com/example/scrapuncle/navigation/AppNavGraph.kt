@@ -1,12 +1,16 @@
 package com.example.scrapuncle.navigation
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -14,6 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.example.scrapuncle.AboutUsScreen
+import com.example.scrapuncle.PickupDetailScreen
 import com.example.scrapuncle.auth.ui.AccountSettingsRoute
 import com.example.scrapuncle.auth.ui.AddAddressScreen
 import com.example.scrapuncle.auth.ui.CreateProfileScreen
@@ -24,6 +29,7 @@ import com.example.scrapuncle.auth.ui.WelcomeScreen
 import com.example.scrapuncle.auth.viewmodel.AuthViewModel
 import com.example.scrapuncle.auth.viewmodel.ScheduleViewModel
 import com.example.scrapuncle.pages.schedule.SchedulePickupScreen
+import com.example.scrapuncle.pages.schedule.formatAddress
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -38,27 +44,50 @@ fun AppNavGraph(
         startDestination = Screen.Splash.route,
         enterTransition = {
             slideInHorizontally(
-                initialOffsetX = { it },
-                animationSpec = tween(300)
-            ) + fadeIn()
+                initialOffsetX = { it / 2 },
+                animationSpec = tween(
+                    durationMillis = 350,
+                    easing = FastOutSlowInEasing
+                )
+            ) + fadeIn(
+                animationSpec = tween(200)
+            )
         },
+
         exitTransition = {
             slideOutHorizontally(
-                targetOffsetX = { -it / 4 },
-                animationSpec = tween(300)
-            ) + fadeOut()
+                targetOffsetX = { -it / 3 },
+                animationSpec = tween(
+                    durationMillis = 280,
+                    easing = FastOutSlowInEasing
+                )
+            ) + fadeOut(
+                animationSpec = tween(180)
+            )
         },
+
         popEnterTransition = {
             slideInHorizontally(
-                initialOffsetX = { -it / 4 },
-                animationSpec = tween(300)
-            ) + fadeIn()
+                initialOffsetX = { -it / 3 },
+                animationSpec = tween(
+                    durationMillis = 300,
+                    easing = FastOutSlowInEasing
+                )
+            ) + fadeIn(
+                animationSpec = tween(180)
+            )
         },
+
         popExitTransition = {
             slideOutHorizontally(
-                targetOffsetX = { it },
-                animationSpec = tween(300)
-            ) + fadeOut()
+                targetOffsetX = { it / 2 },
+                animationSpec = tween(
+                    durationMillis = 280,
+                    easing = FastOutSlowInEasing
+                )
+            ) + fadeOut(
+                animationSpec = tween(140)
+            )
         }
     ) {
 
@@ -132,15 +161,9 @@ fun AppNavGraph(
 
             composable(Screen.SchedulePickup.route) { backStackEntry ->
 
-                val parentEntry = remember(backStackEntry) {
-                    navController.getBackStackEntry(Screen.ScheduleGraph.route)
-                }
-
-                val scheduleViewModel: ScheduleViewModel =
-                    hiltViewModel(parentEntry)
 
                 SchedulePickupScreen(
-                    viewModel = scheduleViewModel,
+                    viewModel = hiltViewModel(),
                     onBack = { navController.popBackStack() },
                     onSelectAddress = {
                         navController.navigate(Screen.AddAddress.route)
@@ -150,16 +173,10 @@ fun AppNavGraph(
 
             composable(Screen.AddAddress.route) { backStackEntry ->
 
-                val parentEntry = remember(backStackEntry) {
-                    navController.getBackStackEntry(Screen.ScheduleGraph.route)
-                }
-
-                val scheduleViewModel: ScheduleViewModel =
-                    hiltViewModel(parentEntry)
 
                 AddAddressScreen(
                     viewModel = hiltViewModel(), // AddAddressViewModel
-                    scheduleViewModel = scheduleViewModel,
+                    scheduleViewModel = hiltViewModel(),
                     onSchedulePickup = {
                         navController.popBackStack()
                     }
@@ -174,7 +191,12 @@ fun AppNavGraph(
             AccountSettingsRoute(
                 viewModel = hiltViewModel(),
                 onBack = { navController.popBackStack() },
-                onSignedOut = { navController.navigate(Screen.Welcome.route) }
+                onSignedOut = {
+                    navController.navigate(Screen.Splash.route) {
+                        popUpTo(0) { inclusive = true } // clears entire back stack
+                        launchSingleTop = true
+                    }
+                }
             )
         }
 
@@ -183,5 +205,16 @@ fun AppNavGraph(
                 onBack = { navController.popBackStack() }
             )
         }
+
+        composable(Screen.PickupDetails.route) { backStackEntry ->
+
+            val pid = backStackEntry.arguments?.getString("pid") ?: return@composable
+            PickupDetailScreen(
+                pid = pid,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+
     }
 }
