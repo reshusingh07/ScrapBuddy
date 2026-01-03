@@ -42,7 +42,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.scrapuncle.R
 import com.example.scrapuncle.auth.data.HorizontalCards
-import com.example.scrapuncle.ui.theme.lightGreen
+import com.example.scrapuncle.ui.theme.InterFontFamily
+ import com.example.scrapuncle.ui.theme.lightGreen
 import kotlinx.coroutines.delay
 
 
@@ -81,88 +82,97 @@ fun HorizontalCardSection(
         radius = 550f
     )
 
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        HorizontalPager(
+            state = pagerState,
+            contentPadding = PaddingValues(horizontal = 18.dp),
+            pageSpacing = 16.dp,
+            modifier = Modifier.fillMaxWidth()
 
-    HorizontalPager(
-        state = pagerState,
-        contentPadding = PaddingValues(horizontal = 18.dp),
-        pageSpacing = 16.dp,
-        modifier = Modifier.fillMaxWidth()
+        ) { page ->
 
-    ) { page ->
-
-        val card = cards[page]
-        val scale by animateFloatAsState(
-            if (pagerState.currentPage == page) 1f else 0.96f
-        )
+            val card = cards[page]
+            val scale by animateFloatAsState(
+                if (pagerState.currentPage == page) 1f else 0.96f
+            )
 
 
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .scale(scale)
-                .height(130.dp),
-            shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = Color.Transparent
-            ),
-            elevation = CardDefaults.cardElevation(2.dp)
-        ) {
-
-            Box(
+            Card(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color(0xFF48B758))
-                    .background(greenGlowBrush)
-                    .padding(12.dp),
-
+                    .fillMaxWidth()
+                    .scale(scale)
+                    .height(130.dp),
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.Transparent
+                ),
+                elevation = CardDefaults.cardElevation(2.dp)
             ) {
-                Row(
+
+                Box(
                     modifier = Modifier
                         .fillMaxSize()
+                        .background(Color(0xFF48B758))
+                        .background(greenGlowBrush)
                         .padding(12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
 
-                    // LEFT IMAGE
-                    Image(
-                        painter = painterResource(card.imageRes),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(110.dp)
-                            .clip(RoundedCornerShape(14.dp)),
-                        contentScale = ContentScale.Fit
-                    )
-
-                    Spacer(modifier = Modifier.width(12.dp))
-
-                    // RIGHT TEXT
-                    Column(
-                        modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.Center
                     ) {
-                        Text(
-                            text = card.title,
-                            fontSize = 17.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color.Black.copy(alpha = 0.8f)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+
+                        // LEFT IMAGE
+                        Image(
+                            painter = painterResource(card.imageRes),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(110.dp)
+                                .clip(RoundedCornerShape(14.dp)),
+                            contentScale = ContentScale.Fit
                         )
 
+                        Spacer(modifier = Modifier.width(10.dp))
 
-                        Text(
-                            text = "Fast • Reliable • Doorstep",
-                            fontSize = 12.sp
-                        )
+                        // RIGHT TEXT
+                        Column(
+                            modifier = Modifier.weight(1f),
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = card.title,
+                                fontFamily = InterFontFamily,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color.Black.copy(alpha = 0.75f)
+                            )
+
+
+                            Text(
+                                text = "Fast • Reliable • Doorstep",
+                                fontFamily = InterFontFamily,
+                                fontWeight = FontWeight.Medium,
+                                color = Color.White.copy(alpha = 0.9f),
+                                fontSize = 12.sp
+                            )
+                        }
                     }
                 }
             }
         }
-    }
-    Spacer(Modifier.height(4.dp))
+        Spacer(Modifier.height(4.dp))
 
-    PagerIndicator(
-        totalDots = cards.size,
-        selectedIndex = pagerState.currentPage
-    )
+        PagerIndicator(
+            totalDots = cards.size,
+            selectedIndex = pagerState.currentPage
+        )
+    }
 }
 
 @Composable
@@ -207,7 +217,8 @@ fun PagerIndicator(
 @Composable
 fun HorizontalCardSectionPreview() {
     val sampleCards = listOf(
-        HorizontalCards("Pickup at your address", imageRes = R.drawable.card01),
+        HorizontalCards("Pickup at your address",
+            imageRes = R.drawable.card01),
         HorizontalCards("Hello", imageRes = R.drawable.card02),
         HorizontalCards("Hello", imageRes = R.drawable.card03)
     )

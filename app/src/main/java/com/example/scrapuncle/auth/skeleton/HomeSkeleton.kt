@@ -1,16 +1,21 @@
 package com.example.scrapuncle.auth.skeleton
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -29,40 +34,102 @@ fun HomeSkeleton() {
             .fillMaxSize()
             .systemBarsPadding()
             .verticalScroll(rememberScrollState())
-            .padding(bottom = 12.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(top = 10.dp, bottom = 12.dp)
     ) {
 
-        // ---------- LOGO ----------
-        Box(
+        // ---------------- HEADER SKELETON ----------------
+        Row(
             modifier = Modifier
-                .fillMaxWidth(0.30f)
-                .aspectRatio(1f)
-                .background(brush, RoundedCornerShape(16.dp))
-        )
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
 
-        Spacer(Modifier.height(24.dp))
+            // Profile image
+            Box(
+                modifier = Modifier
+                    .size(46.dp)
+                    .background(brush, CircleShape)
+            )
 
-        // ---------- PRIMARY BUTTON ----------
+            Spacer(Modifier.width(12.dp))
+
+            // Hello + username
+            Column {
+                Box(
+                    modifier = Modifier
+                        .width(60.dp)
+                        .height(10.dp)
+                        .background(brush, RoundedCornerShape(4.dp))
+                )
+
+                Spacer(Modifier.height(6.dp))
+
+                Box(
+                    modifier = Modifier
+                        .width(100.dp)
+                        .height(14.dp)
+                        .background(brush, RoundedCornerShape(6.dp))
+                )
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            // Notification bell
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .background(brush, CircleShape)
+            )
+        }
+
+        Spacer(Modifier.height(20.dp))
+
+        // ---------------- PRIMARY BUTTON ----------------
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(32.dp)
+                .height(44.dp)
                 .padding(horizontal = 22.dp)
                 .background(brush, RoundedCornerShape(14.dp))
         )
 
-        Spacer(Modifier.height(30.dp))
+        Spacer(Modifier.height(28.dp))
 
-        // ---------- HORIZONTAL CARDS ----------
+        // ---------------- HORIZONTAL CARD ----------------
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 18.dp)
+                .height(130.dp)
+                .background(brush, RoundedCornerShape(20.dp))
+        )
 
-            HomeHorizontalCardSkeleton(brush)
-            Spacer(Modifier.height(14.dp))
+        Spacer(Modifier.height(10.dp))
 
-        // ---------- BOTTOM INFO ----------
+        // Pager dots
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            repeat(3) {
+                Box(
+                    modifier = Modifier
+                        .padding(horizontal = 4.dp)
+                        .width(6.dp)
+                        .height(6.dp)
+                        .background(brush, CircleShape)
+                )
+            }
+        }
+
+        Spacer(Modifier.height(28.dp))
+
+        // ---------------- BOTTOM INFO ----------------
         BottomInfoSkeleton(brush)
     }
 }
+
 
 @Composable
 private fun HomeHorizontalCardSkeleton(brush: Brush) {

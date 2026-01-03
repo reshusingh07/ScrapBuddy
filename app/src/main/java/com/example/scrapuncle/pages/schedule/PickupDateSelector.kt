@@ -39,6 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.scrapuncle.R
+import com.example.scrapuncle.ui.theme.InterFontFamily
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -165,6 +166,7 @@ fun DateDisplayCard(selectedDate: String) {
         ) {
             Text(
                 text = selectedDate,
+                fontFamily = InterFontFamily,
                 color = Color.DarkGray.copy(alpha = 0.7f),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold

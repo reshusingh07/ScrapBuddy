@@ -53,6 +53,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.scrapuncle.ui.theme.InterFontFamily
 import com.example.scrapuncle.ui.theme.lightGreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,7 +74,7 @@ fun AboutUsScreen(
                     ) {
                         Text(
                             text = "About Developer",
-//                        fontFamily = JosefinSans,
+                            fontFamily = InterFontFamily,
                             fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.onSurface
                         )
@@ -188,7 +189,7 @@ private fun DeveloperProfileCard() {
                     text = "Reshu",
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold,
-//                    fontFamily = JosefinSans,
+                    fontFamily = InterFontFamily,
                     color = Color.White.copy(alpha = 0.78f)
                 )
 
@@ -196,7 +197,7 @@ private fun DeveloperProfileCard() {
                     text = "Android Developer & UI/UX Enthusiast",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Medium,
-//                    fontFamily = JosefinSans,
+                    fontFamily = InterFontFamily,
                     color = Color.White.copy(alpha = 0.78f),
                     textAlign = TextAlign.Center
                 )
@@ -206,7 +207,7 @@ private fun DeveloperProfileCard() {
                             "design principles and clean architecture.",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal,
-//                    fontFamily = JosefinSans,
+                    fontFamily = InterFontFamily,
                     color = Color.White.copy(alpha = 0.78f),
                     textAlign = TextAlign.Center,
                     lineHeight = 20.sp
@@ -251,7 +252,7 @@ private fun AppInfoCard() {
             Text(
                 text = "Scrap Uncle makes recycling effortless with fast pickups, transparent pricing, and a clean, modern experience. Built as a portfolio project to showcase modern Android development skills and creative problem-solving.",
                 fontSize = 14.sp,
-//                fontFamily = JosefinSans,
+                fontFamily = InterFontFamily,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 lineHeight = 20.sp
             )
@@ -342,7 +343,7 @@ private fun InfoCard(
                     text = title,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold,
-//                    fontFamily = JosefinSans,
+                    fontFamily = InterFontFamily,
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
@@ -401,7 +402,7 @@ private fun TechItem(
                 .size(6.dp)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.primary)
-//                .padding(top = 8.dp)
+                .padding(top = 8.dp)
         )
         Column(
             modifier = Modifier.weight(1f)
@@ -410,14 +411,14 @@ private fun TechItem(
                 text = name,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold,
-//                fontFamily = JosefinSans,
+                fontFamily = InterFontFamily,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
                 text = description,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Normal,
-//                fontFamily = JosefinSans,
+                fontFamily = InterFontFamily,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
@@ -455,7 +456,7 @@ private fun ContactItem(
                 text = value,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,
-//                fontFamily = JosefinSans,
+                fontFamily = InterFontFamily,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.87f)
             )
         }
@@ -475,14 +476,14 @@ private fun ProjectItem(
             text = name,
             fontSize = 14.sp,
             fontWeight = FontWeight.SemiBold,
-//            fontFamily = JosefinSans,
+            fontFamily = InterFontFamily,
             color = MaterialTheme.colorScheme.onSurface
         )
         Text(
             text = description,
             fontSize = 12.sp,
             fontWeight = FontWeight.Normal,
-//            fontFamily = JosefinSans,
+            fontFamily = InterFontFamily,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             lineHeight = 16.sp
         )

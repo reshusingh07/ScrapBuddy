@@ -40,6 +40,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.scrapuncle.R
 import com.example.scrapuncle.auth.viewmodel.AccountSettingsViewModel
 import com.example.scrapuncle.compoents.AppToast
+import com.example.scrapuncle.ui.theme.InterFontFamily
 import com.example.scrapuncle.ui.theme.lightGreen
 
 
@@ -105,6 +106,7 @@ fun ProfileScreen(
                     ) {
                         Text(
                             text = initials,
+                            fontFamily = InterFontFamily,
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White,
@@ -125,6 +127,7 @@ fun ProfileScreen(
 
                 Text(
                     text = "Hi ${uiState.fullName} !",
+                    fontFamily = InterFontFamily,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
@@ -133,6 +136,7 @@ fun ProfileScreen(
 
                 Text(
                     text = formatPhoneNumber(uiState.phone),
+                    fontFamily = InterFontFamily,
                     fontSize = 14.sp,
                     color = Color.Gray
                 )
@@ -190,6 +194,7 @@ fun ProfileScreen(
             ) {
                 Text(
                     text = "ScrapUncle",
+                    fontFamily = InterFontFamily,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     lineHeight = 22.sp,
@@ -197,6 +202,7 @@ fun ProfileScreen(
                 )
                 Text(
                     text = " Version 6.1.23",
+                    fontFamily = InterFontFamily,
                     fontSize = 12.sp,
                     lineHeight = 20.sp,
                     fontWeight = FontWeight.Medium,
@@ -253,6 +259,7 @@ fun MenuCard(title: String, icon: Int, onClick: () -> Unit) {
 
             Text(
                 text = title,
+                fontFamily = InterFontFamily,
                 fontSize = 13.sp,
                 color = Color(0xFF333333).copy(alpha = 0.85f),
                 fontWeight = FontWeight.W400

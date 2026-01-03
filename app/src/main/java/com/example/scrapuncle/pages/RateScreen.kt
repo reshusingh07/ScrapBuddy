@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.scrapuncle.R
+import com.example.scrapuncle.ui.theme.InterFontFamily
 
 
 @Composable
@@ -128,14 +129,16 @@ fun RateHeader() {
     ) {
         Text(
             text = "Check Rates",
+            fontFamily = InterFontFamily,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.SemiBold,
             color = Color.Black.copy(alpha = 0.8f)
         )
         Text(
             text = "Updated scrap prices near you",
+            fontFamily = InterFontFamily,
             style = MaterialTheme.typography.bodySmall,
-            color = Color.Gray
+            color = Color.Gray.copy(alpha = 0.85f)
         )
     }
 }
@@ -154,6 +157,7 @@ fun PriceChip(price: String) {
     ) {
         Text(
             text = price,
+            fontFamily = InterFontFamily,
             style = MaterialTheme.typography.labelSmall,
             color = Color(0xFF1B5E20),
             fontWeight = FontWeight.Medium

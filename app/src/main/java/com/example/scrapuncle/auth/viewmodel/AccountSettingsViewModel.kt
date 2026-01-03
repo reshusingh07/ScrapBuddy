@@ -2,7 +2,7 @@ package com.example.scrapuncle.auth.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.scrapuncle.auth.repo.AccountSettingsEvent
+import com.example.scrapuncle.auth.module.AccountSettingsEvent
 import com.example.scrapuncle.auth.repositoryImpl.ProfileRepositoryImpl
 import com.example.scrapuncle.auth.uistate.AccountSettingsUiState
 
@@ -56,7 +56,7 @@ class AccountSettingsViewModel @Inject constructor(
                                 fullName = profile.fullName,
                                 email = profile.email,
                                 phone = phone,
-
+                                gender = profile.gender,
                                 // store initial values
                                 initialFullName = profile.fullName,
                                 initialEmail = profile.email,

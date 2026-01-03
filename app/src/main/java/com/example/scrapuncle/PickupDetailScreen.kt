@@ -52,6 +52,7 @@ import com.example.scrapuncle.auth.viewmodel.ScheduleViewModel
 import com.example.scrapuncle.compoents.EmptyState
 import com.example.scrapuncle.pages.schedule.formatAddress
 import com.example.scrapuncle.pages.schedule.formatPickupDate
+import com.example.scrapuncle.ui.theme.InterFontFamily
 import com.example.scrapuncle.ui.theme.lightGreen
 import com.example.scrapuncle.ui.theme.poppinsCategoryFont
 import kotlinx.coroutines.delay
@@ -124,10 +125,10 @@ fun PickupDetailContent(
         Text(
             text = "Your pickup is $status",
             modifier = Modifier.fillMaxWidth(),
-            fontSize = 22.sp,
-            fontFamily = poppinsCategoryFont,
+            fontFamily = InterFontFamily,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.SemiBold,
-            color = Color(0xFF1F1F1F),
+            color = Color.Black.copy(alpha = 0.8f),
             textAlign = TextAlign.Center
         )
 
@@ -137,8 +138,8 @@ fun PickupDetailContent(
             text = "Once verified, our pickup agent will reach you within the selected time slot.",
             modifier = Modifier.fillMaxWidth(),
             fontSize = 13.sp,
-            fontFamily = poppinsCategoryFont,
-            color = Color.Black.copy(alpha = 0.65f),
+            fontFamily = InterFontFamily,
+            color = Color.Black.copy(alpha = 0.62f),
             lineHeight = 20.sp,
             textAlign = TextAlign.Center
         )
@@ -188,10 +189,11 @@ fun PickupDetailContent(
              ) {
                 // -------- ADDRESS --------
                 Text(
+                    modifier = Modifier.padding(start = 4.dp),
                     text = address,
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Medium,
-                    fontFamily = poppinsCategoryFont,
+                    fontFamily = InterFontFamily,
                     lineHeight = 20.sp,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.78f)
                 )
@@ -201,7 +203,7 @@ fun PickupDetailContent(
                 Text(
                     text = "-------------------------------------",
                     modifier = Modifier.fillMaxWidth(),
-                    fontFamily = poppinsCategoryFont,
+                    fontFamily = InterFontFamily,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,
                     color = Color.Gray.copy(alpha = 0.72f),
@@ -260,10 +262,10 @@ fun PickupDetailContent(
             ) {
                 Text(
                     text = "Got it",
+                    fontFamily = InterFontFamily,
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Medium,
                     color = Color.White,
-                    fontFamily = poppinsCategoryFont,
                 )
             }
         }
@@ -284,7 +286,7 @@ private fun InfoCardDetails(
                     text = title,
                     fontSize = 13.sp,
                     fontWeight = FontWeight.SemiBold,
-                    fontFamily = poppinsCategoryFont,
+                    fontFamily = InterFontFamily,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.78f)
                 )
             }
@@ -307,7 +309,7 @@ private fun InfoRowDetails(
             text = label,
             fontSize = 12.sp,
             fontWeight = FontWeight.Normal,
-            fontFamily = poppinsCategoryFont,
+            fontFamily = InterFontFamily,
             color = Color.DarkGray.copy(alpha = 0.82f),
             modifier = Modifier.weight(1f)
         )
@@ -315,7 +317,7 @@ private fun InfoRowDetails(
             text = value,
             fontSize = 12.sp,
             fontWeight = FontWeight.Medium,
-            fontFamily = poppinsCategoryFont,
+            fontFamily = InterFontFamily,
             color = Color.Black.copy(alpha = 0.9f)
         )
     }
@@ -352,6 +354,7 @@ fun DetailsStatusChip(status: String) {
         Spacer(Modifier.width(4.dp))
         Text(
             text = status,
+            fontFamily = InterFontFamily,
             fontSize = 11.sp,
             fontWeight = FontWeight.Medium,
             color = Color.Black.copy(alpha = 0.8f)

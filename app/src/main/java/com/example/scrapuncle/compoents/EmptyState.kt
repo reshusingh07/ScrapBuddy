@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.scrapuncle.ui.theme.InterFontFamily
 import com.example.scrapuncle.ui.theme.lightGreen
 
 @Composable
@@ -36,6 +37,7 @@ fun EmptyState(
 
         Text(
             text = message,
+            fontFamily = InterFontFamily,
             fontSize = 16.sp,
             color = Color.Gray,
             textAlign = TextAlign.Center

@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.scrapuncle.R
+import com.example.scrapuncle.ui.theme.InterFontFamily
 
 
 @Composable
@@ -44,9 +45,12 @@ fun BottomInfoSection() {
             contentAlignment = Alignment.Center // Centers the text in Box
         ) {
             Text(
+                modifier = Modifier.padding(horizontal = 2.dp),
                 text = "We are currently operational in Moradabad",
                 fontSize = 12.sp,
+                fontFamily = InterFontFamily,
                 fontWeight = FontWeight.Medium,
+//                fontWeight = FontWeight.Medium,
                 color = Color(0xFF333322).copy(alpha = 0.8f), // Brown color
                 textAlign = TextAlign.Center
             )
@@ -56,14 +60,16 @@ fun BottomInfoSection() {
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "1,543,281 KG",
+            text = "45,39,110 Kg",
             fontSize = 20.sp,
             color = Color.Black,
             modifier = Modifier.padding(vertical = 4.dp),
             textAlign = TextAlign.Start
         )
         Text(
-            text = "RECYCLED",
+            text = "Recycled",
+            fontFamily = InterFontFamily,
+            fontWeight = FontWeight.Light,
             fontSize = 16.sp,
             color = Color.Gray,
             textAlign = TextAlign.Start
@@ -76,7 +82,7 @@ fun BottomInfoSection() {
             contentDescription = "Bottom Banner Image",
             modifier = Modifier
                 .fillMaxWidth()
-                .height(188.dp),
+                .height(200.dp),
             contentScale = ContentScale.Fit
         )
     }

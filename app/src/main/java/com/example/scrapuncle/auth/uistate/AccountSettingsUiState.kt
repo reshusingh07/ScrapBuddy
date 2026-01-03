@@ -5,7 +5,7 @@ data class AccountSettingsUiState(
     val fullName: String = "",
     val email: String = "",
     val phone: String = "",
-
+    val gender: String = "",
     val isLoading: Boolean = true,
     val isSaving: Boolean = false,
     val isDirty: Boolean = false,

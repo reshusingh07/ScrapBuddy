@@ -65,7 +65,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.scrapuncle.R
-import com.example.scrapuncle.auth.repo.AccountSettingsEvent
+import com.example.scrapuncle.auth.module.AccountSettingsEvent
 import com.example.scrapuncle.auth.uistate.AccountSettingsUiState
 import com.example.scrapuncle.auth.viewmodel.AccountSettingsViewModel
 import com.example.scrapuncle.compoents.SignOutConfirmationDialog

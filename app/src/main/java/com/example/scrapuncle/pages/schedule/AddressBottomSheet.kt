@@ -52,6 +52,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.scrapuncle.auth.data.Address
+import com.example.scrapuncle.ui.theme.InterFontFamily
 import com.example.scrapuncle.ui.theme.lightBlack
 import com.example.scrapuncle.ui.theme.poppinsCategoryFont
 import com.google.common.math.LinearTransformation.horizontal
@@ -162,7 +163,7 @@ fun AddressBottomSheet(
                                     tint = Color(0xFF00A651)
                                 )
 
-                                Text("Add New Address", color = Color(0xFF00A651))
+                                Text("Add New Address",  fontFamily = InterFontFamily, color = Color(0xFF00A651))
                             }
                         }
                     }
@@ -243,6 +244,7 @@ fun AddressCardSheet(
                 ) {
                     Text(
                         address.tag.uppercase(),
+                        fontFamily = InterFontFamily,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.DarkGray.copy(alpha = 0.9f)
@@ -261,6 +263,7 @@ fun AddressCardSheet(
                 ) {
                     Text(
                         text = "OPERATIONAL",
+                        fontFamily = InterFontFamily,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF1B5E20)
@@ -274,6 +277,7 @@ fun AddressCardSheet(
             Text(
                 formattedAddress,
                 fontSize = 13.sp,
+                fontFamily = InterFontFamily,
                 fontWeight = FontWeight.SemiBold,
                 color = Color.DarkGray.copy(alpha = 0.9f)
             )
@@ -286,12 +290,14 @@ fun AddressCardSheet(
 
                 Text(
                     text = "PINCODE: ",
+                    fontFamily = InterFontFamily,
                     fontSize = 11.sp,
                     color = Color.DarkGray.copy(alpha = 0.7f)
                 )
                 // PIN CODE LINE
                 Text(
                     text = address.pinCode,
+                    fontFamily = InterFontFamily,
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.DarkGray.copy(alpha = 0.9f)

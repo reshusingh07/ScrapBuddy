@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.scrapuncle.ui.theme.InterFontFamily
 import com.example.scrapuncle.ui.theme.lightGreen
 
 
@@ -35,6 +36,7 @@ fun PickupButton(onClick: () ->Unit) {
 
     ) {
         Text(text = "SCHEDULE A PICKUP",
+            fontFamily = InterFontFamily,
             fontSize = 15.sp,
         )
     }

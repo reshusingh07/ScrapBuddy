@@ -39,10 +39,14 @@ fun ScrapUncleTheme(content: @Composable () -> Unit) {
 
     SideEffect {
         val window = activity.window
-        window.statusBarColor = Color.White.toArgb()
+        // Enable edge-to-edge
+        window.setDecorFitsSystemWindows(false)
+
+        // Transparent status bar
+        window.statusBarColor = Color.Transparent.toArgb()
 
         val controller = WindowInsetsControllerCompat(window, window.decorView)
-        controller.isAppearanceLightStatusBars = true // DARK icons
+        controller.isAppearanceLightStatusBars = true // dark icons
     }
 
     MaterialTheme(

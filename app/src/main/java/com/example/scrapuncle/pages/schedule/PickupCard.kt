@@ -41,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.scrapuncle.auth.data.Address
+import com.example.scrapuncle.ui.theme.InterFontFamily
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -109,6 +110,7 @@ fun PickupCard(
             ) {
                 Text(
                     text = formatPickupDate(dateText),
+                    fontFamily = InterFontFamily,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color(0xFF1F1F1F)
@@ -153,6 +155,7 @@ fun PickupCard(
                         Spacer(Modifier.width(4.dp))
                         Text(
                             text = slot,
+                            fontFamily = InterFontFamily,
                             fontSize = 12.sp,
                             color = Color.Black.copy(alpha = 0.6f)
                         )
@@ -161,6 +164,7 @@ fun PickupCard(
                     // PID
                     Text(
                         text = " PID • $pid",
+                        fontFamily = InterFontFamily,
                         fontSize = 11.sp,
                         color = Color.Black.copy(alpha = 0.45f)
                     )
@@ -215,6 +219,7 @@ fun StatusChip(status: String) {
         Spacer(Modifier.width(4.dp))
         Text(
             text = status,
+            fontFamily = InterFontFamily,
             fontSize = 10.sp,
             fontWeight = FontWeight.Medium,
             color = color
