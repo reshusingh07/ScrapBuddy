@@ -55,6 +55,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -67,9 +68,14 @@ import com.example.scrapuncle.auth.data.Address
 import com.example.scrapuncle.auth.module.ScheduleEvent
 import com.example.scrapuncle.auth.module.ScheduleUiEvent
 import com.example.scrapuncle.auth.skeleton.AddressShimmer
+import com.example.scrapuncle.auth.skeleton.AddressSkeletonScreen
 import com.example.scrapuncle.auth.skeleton.rememberShimmerBrush
 import com.example.scrapuncle.auth.viewmodel.ScheduleViewModel
+import com.example.scrapuncle.compoents.AddressCard
+import com.example.scrapuncle.compoents.SingleSelectChip
+import com.example.scrapuncle.ui.theme.InterFontFamily
 import com.example.scrapuncle.ui.theme.lightGreen
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -103,7 +109,12 @@ fun SchedulePickupScreen(
         viewModel.uiEvents.collect { event ->
             when (event) {
                 is ScheduleUiEvent.PickupScheduled -> {
-//                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        event.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    delay(300)
                     onBack() // navigate AFTER toast trigger
                 }
                 ScheduleUiEvent.NavigateBack -> onBack()
@@ -160,18 +171,31 @@ fun SchedulePickupScreen(
                     .padding(horizontal = 15.dp, vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Black,
-                    modifier = Modifier.clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null
-                    ) { onBack() }
-                )
+                Box(
+                    modifier = Modifier
+                        .padding(2.dp)
+                        .background(
+                            Color.LightGray.copy(alpha = 0.12f),
+                            RoundedCornerShape(7.dp)
+                        )
+                        .size(26.dp)
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) { onBack() },
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.icon_arrow_back),
+                        contentDescription = "Back",
+                        tint = Black.copy(alpha = 0.58f),
+                    )
+                }
+
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = "Schedule Pickup",
+                    fontFamily = InterFontFamily,
                     fontWeight = FontWeight.SemiBold,
                     color = Black.copy(alpha = 0.94f),
                     fontSize = 20.sp,
@@ -209,6 +233,7 @@ fun SchedulePickupScreen(
 
                         Text(
                             text = "Date",
+                            fontFamily = InterFontFamily,
                             fontWeight = FontWeight.W500,
                             fontSize = 15.sp,
                             color = Color.DarkGray.copy(alpha = 1.4f)
@@ -246,6 +271,7 @@ fun SchedulePickupScreen(
 
                         Text(
                             text = "Time",
+                            fontFamily = InterFontFamily,
                             fontWeight = FontWeight.W500,
                             fontSize = 15.sp,
                             color = Color.DarkGray.copy(alpha = 1.4f)
@@ -297,6 +323,7 @@ fun SchedulePickupScreen(
 
                         Text(
                             text = "Estimated Weight",
+                            fontFamily = InterFontFamily,
                             fontWeight = FontWeight.W500,
                             fontSize = 15.sp,
                             color = Color.DarkGray.copy(alpha = 1.4f)
@@ -349,6 +376,7 @@ fun SchedulePickupScreen(
 
                         Text(
                             text = "Address",
+                            fontFamily = InterFontFamily,
                             fontWeight = FontWeight.W500,
                             fontSize = 15.sp,
                             color = Color.DarkGray.copy(alpha = 1.4f)
@@ -378,6 +406,7 @@ fun SchedulePickupScreen(
 
                                 Text(
                                     text = "Change",
+                                    fontFamily = InterFontFamily,
                                     fontSize = 14.sp,
                                     color = Color(0xFF007AFF).copy(alpha = 0.8f)
                                 )
@@ -391,7 +420,7 @@ fun SchedulePickupScreen(
                     Spacer(modifier = Modifier.height(2.dp))
 
 
-                    val shimmerBrush = rememberShimmerBrush()
+
 
                     Crossfade(
                         targetState = state.isAddressLoading,
@@ -404,7 +433,7 @@ fun SchedulePickupScreen(
 
                         when {
                             loading -> {
-                                AddressShimmer(brush = shimmerBrush)
+                                AddressSkeletonScreen( )
                             }
 
                             selectedAddress != null -> {
@@ -450,17 +479,17 @@ fun SchedulePickupScreen(
                     ) {
                         if (isSubmitting) {
                             CircularProgressIndicator(
+                                color = White,
                                 strokeWidth = 2.dp,
-                                modifier = Modifier
-                                    .width(24.dp)
-                                    .height(24.dp)
+                                modifier = Modifier.size(22.dp),
                             )
                         } else {
                             Text(
                                 "SCHEDULE PICKUP",
+                                fontFamily = InterFontFamily,
                                 fontWeight = FontWeight.Bold,
-                                color = Color.White,
-                                fontSize = 16.sp
+                                color = White,
+                                fontSize = 15.sp
                             )
                         }
                     }
@@ -471,136 +500,6 @@ fun SchedulePickupScreen(
         }
     }
 }
-
-@Composable
-fun SingleSelectChip(
-    label: String, selected: Boolean, onClick: () -> Unit
-) {
-
-    val scale by animateFloatAsState(
-        targetValue = if (selected) 1.055f else 1.01f,
-        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
-        label = "chipScale"
-    )
-
-    Box(
-        modifier = Modifier
-            .scale(scale)
-            .background(
-                brush = if (selected)
-                    Brush.verticalGradient(
-                        listOf(
-                            Color(0xFF00A651).copy(alpha = 0.75f),
-                            Color(0xFF00A651).copy(alpha = 0.9f) // solid color as gradient
-                        )
-                    )
-                else
-                    Brush.verticalGradient(
-                        listOf(
-                            Color.White.copy(alpha = 0.1f),
-                            Color.LightGray.copy(alpha = 0.14f)
-                        )
-                    ),
-                shape = RoundedCornerShape(12.dp)
-            )
-            .border(
-                width = 1.dp,
-                color = Color.LightGray.copy(alpha = 0.2f),
-                shape = RoundedCornerShape(12.dp)
-            )
-            .clickable(
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() }) {
-                onClick()
-            }
-            .padding(horizontal = 12.dp, vertical = 6.dp)) {
-        Text(
-            text = label,
-            color = if (selected) Color.White else Color.DarkGray.copy(alpha = 9f),
-            fontWeight = FontWeight.Medium,
-            fontSize = 13.sp
-        )
-    }
-}
-
-
-@Composable
-fun AddressCard(
-    address: Address
-) {
-
-    val formattedAddress = buildString {
-        append(address.fullAddress)
-        if (address.city.isNotEmpty()) append(", ${address.city}")
-        if (address.state.isNotEmpty()) append(", ${address.state}")
-        if (address.pinCode.isNotEmpty()) append(" - ${address.pinCode}")
-    }
-
-    val backgroundColor =
-        Color(0xFF4CAF50).copy(alpha = 0.05f)
-
-    val borderColor =
-          Color(0xFF4CAF50).copy(alpha = 0.35f)
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .background(backgroundColor)
-            .border(
-                width = 1.dp,
-                color = borderColor,
-                shape = RoundedCornerShape(12.dp)
-            )
-            .padding(14.dp)
-    ) {
-        Column {
-
-            // Address
-            Text(
-                text = formattedAddress,
-                fontSize = 14.sp,
-                lineHeight = 21.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color(0xFF212121),
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                Text(
-                    text = "Pincode ${address.pinCode}",
-                    fontSize = 12.sp,
-                    color = Color(0xFF757575),
-                    modifier = Modifier.weight(1f)
-                )
-
-                Box(
-                    modifier = Modifier
-                        .background(
-                            color = Color(0xFFDFF5E4),
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
-                ) {
-                    Text(
-                        text = "Operational",
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color(0xFF2E7D32)
-                    )
-                }
-            }
-        }
-    }
-}
-
-
 
 @Composable
 fun CreateAddressButton(onClick: () -> Unit) {
@@ -629,7 +528,7 @@ fun CreateAddressButton(onClick: () -> Unit) {
                     modifier = Modifier.size(18.dp),
                     tint = Color(0xFF00A651)
                 )
-                Text("Create Address", color = Color(0xFF00A651))
+                Text("Create Address",  fontFamily = InterFontFamily, color = Color(0xFF00A651))
             }
         }
     }

@@ -39,7 +39,9 @@ class ScheduleViewModel @Inject constructor(
 //    private val _toastEvent = MutableSharedFlow<Pair<String, Long>>()
 //    val toastEvent = _toastEvent.asSharedFlow()
 
-    private val _uiEvents = MutableSharedFlow<ScheduleUiEvent>()
+    private val _uiEvents = MutableSharedFlow<ScheduleUiEvent>(
+        replay = 1
+    )
     val uiEvents = _uiEvents.asSharedFlow()
 
     init {

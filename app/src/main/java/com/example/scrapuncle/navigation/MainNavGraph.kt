@@ -1,8 +1,11 @@
 package com.example.scrapuncle.navigation
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -20,15 +23,21 @@ import com.example.scrapuncle.pages.schedule.formatAddress
 @Composable
 fun MainNavGraph(
     navController: NavHostController,
-    rootNavController: NavHostController
+    rootNavController: NavHostController,
+    modifier: Modifier = Modifier,
 ) {
     NavHost(
+        modifier = Modifier.systemBarsPadding(),
         navController = navController,
         startDestination = Screen.Home.route
     ) {
 
         composable(Screen.Home.route) {
             HomeScreen(
+                viewModel = hiltViewModel(),
+                onNavigateToAccountSetting = {
+                    rootNavController.navigate(Screen.AccountSetting.route)
+                },
                 onScheduleNow = {
                     rootNavController.navigate(Screen.SchedulePickup.route)
                 }

@@ -10,9 +10,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -39,11 +42,15 @@ import com.example.scrapuncle.R
 import com.example.scrapuncle.auth.skeleton.ShimmerPickupCardItem
 import com.example.scrapuncle.auth.skeleton.rememberShimmerBrush
 import com.example.scrapuncle.auth.viewmodel.ScheduleViewModel
+import com.example.scrapuncle.ui.theme.InterFontFamily
 
 
 private enum class UiMode {
     Loading, Empty, Content
 }
+private val FloatingNavBarHeight = 30.dp
+private val FloatingNavBarMargin = 16.dp
+
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -140,6 +147,14 @@ fun ScheduleScreen(
                 modifier = Modifier
                     .align(Alignment.BottomEnd) // NOW VALID
                     .padding(16.dp)
+                    .padding(
+                        bottom =
+                            FloatingNavBarHeight +
+                                    FloatingNavBarMargin +
+                                    WindowInsets.navigationBars
+                                        .asPaddingValues()
+                                        .calculateBottomPadding()
+                    )
             )
         }
     }
@@ -185,6 +200,7 @@ fun EmptyPickupScreen() {
 
         Text(
             text = "No pickups found",
+            fontFamily = InterFontFamily,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             color = Color.DarkGray
@@ -192,6 +208,7 @@ fun EmptyPickupScreen() {
         Spacer(modifier = Modifier.height(6.dp))
         Text(
             text = "Schedule your first pickup to get started",
+            fontFamily = InterFontFamily,
             style = MaterialTheme.typography.bodyMedium,
             color = Color.Gray
         )
@@ -207,14 +224,16 @@ fun RateHeader() {
     ) {
         Text(
             text = "Pickup",
+            fontFamily = InterFontFamily,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.SemiBold,
             color = Color.Black.copy(alpha = 0.8f)
         )
         Text(
             text = "View or schedule your scrap pickup",
+            fontFamily = InterFontFamily,
             style = MaterialTheme.typography.bodySmall,
-            color = Color.Gray
+            color = Color.Gray.copy(alpha = 0.85f)
         )
     }
 }

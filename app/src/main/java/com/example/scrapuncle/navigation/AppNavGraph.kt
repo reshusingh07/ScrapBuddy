@@ -44,45 +44,45 @@ fun AppNavGraph(
         startDestination = Screen.Splash.route,
         enterTransition = {
             slideInHorizontally(
-                initialOffsetX = { it / 2 },
+                initialOffsetX = { it / 1 },
                 animationSpec = tween(
-                    durationMillis = 350,
+                    durationMillis = 330,
                     easing = FastOutSlowInEasing
                 )
             ) + fadeIn(
-                animationSpec = tween(200)
+                animationSpec = tween(180)
             )
         },
 
         exitTransition = {
             slideOutHorizontally(
-                targetOffsetX = { -it / 3 },
+                targetOffsetX = { -it / 2 },
                 animationSpec = tween(
-                    durationMillis = 280,
+                    durationMillis = 260,
                     easing = FastOutSlowInEasing
                 )
             ) + fadeOut(
-                animationSpec = tween(180)
+                animationSpec = tween(160)
             )
         },
 
         popEnterTransition = {
             slideInHorizontally(
-                initialOffsetX = { -it / 3 },
+                initialOffsetX = { -it / 2 },
                 animationSpec = tween(
-                    durationMillis = 300,
+                    durationMillis = 280,
                     easing = FastOutSlowInEasing
                 )
             ) + fadeIn(
-                animationSpec = tween(180)
+                animationSpec = tween(160)
             )
         },
 
         popExitTransition = {
             slideOutHorizontally(
-                targetOffsetX = { it / 2 },
+                targetOffsetX = { it / 1 },
                 animationSpec = tween(
-                    durationMillis = 280,
+                    durationMillis = 260,
                     easing = FastOutSlowInEasing
                 )
             ) + fadeOut(
@@ -152,7 +152,7 @@ fun AppNavGraph(
         }
 
         // ---------------------------------------------------------
-        // SCHEDULE FLOW (SHARED VIEWMODEL GRAPH) ⭐
+        // SCHEDULE FLOW (SHARED VIEWMODEL GRAPH)
         // ---------------------------------------------------------
         navigation(
             startDestination = Screen.SchedulePickup.route,
