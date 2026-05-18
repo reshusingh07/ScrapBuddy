@@ -177,8 +177,6 @@ fun AddAddressScreen(
                         onClick = { onSchedulePickup() },
                         shape = RoundedCornerShape(7.dp),
                         color = Color.LightGray.copy(alpha = 0.12f),
-//                        tonalElevation = 0.dp,
-//                        shadowElevation = 0.dp
                     ) {
                         Box(
                             modifier = Modifier

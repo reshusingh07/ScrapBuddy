@@ -20,59 +20,60 @@ import com.example.scrapuncle.pages.schedule.ScheduleScreen
 import com.example.scrapuncle.pages.schedule.formatAddress
 
 
+import androidx.navigation.toRoute
+
 @Composable
 fun MainNavGraph(
     navController: NavHostController,
     rootNavController: NavHostController,
     modifier: Modifier = Modifier,
+    startDestination: Any = Screen.Home,
 ) {
     NavHost(
-        modifier = Modifier.systemBarsPadding(),
+        modifier = modifier.systemBarsPadding(),
         navController = navController,
-        startDestination = Screen.Home.route
+        startDestination = startDestination
     ) {
 
-        composable(Screen.Home.route) {
+        composable<Screen.Home> {
             HomeScreen(
                 viewModel = hiltViewModel(),
                 onNavigateToAccountSetting = {
-                    rootNavController.navigate(Screen.AccountSetting.route)
+                    rootNavController.navigate(Screen.AccountSetting)
                 },
                 onScheduleNow = {
-                    rootNavController.navigate(Screen.SchedulePickup.route)
+                    rootNavController.navigate(Screen.ScheduleGraph)
                 }
             )
         }
 
-        composable(Screen.Rate.route) {
+        composable<Screen.Rate> {
             Column {
                 RateHeader()
                 RateScreen()
             }
         }
 
-        composable(Screen.Schedule.route) {
+        composable<Screen.Schedule> {
             ScheduleScreen(
                 onScheduleNow = {
-                    rootNavController.navigate(Screen.SchedulePickup.route)
+                    rootNavController.navigate(Screen.ScheduleGraph)
                 },
                 onPickupClick = { pid ->
-                    rootNavController.navigate(
-                        Screen.PickupDetails.createRoute(pid)
-                    )
+                    rootNavController.navigate(Screen.PickupDetails(pid))
                 }
             )
         }
 
 
-        composable(Screen.Profile.route) {
+        composable<Screen.Profile> {
             ProfileScreen(
                 viewModel = hiltViewModel(),
                 onNavigateToAccountSetting = {
-                    rootNavController.navigate(Screen.AccountSetting.route)
+                    rootNavController.navigate(Screen.AccountSetting)
                 },
                 onNavigateToAboutUs = {
-                    rootNavController.navigate(Screen.AboutUs.route)
+                    rootNavController.navigate(Screen.AboutUs)
                 }
             )
         }

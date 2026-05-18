@@ -30,6 +30,7 @@ import com.example.scrapuncle.auth.viewmodel.AuthViewModel
 import com.example.scrapuncle.auth.viewmodel.ScheduleViewModel
 import com.example.scrapuncle.pages.schedule.SchedulePickupScreen
 import com.example.scrapuncle.pages.schedule.formatAddress
+import androidx.navigation.toRoute
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -41,7 +42,7 @@ fun AppNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Splash.route,
+        startDestination = Screen.Splash,
         enterTransition = {
             slideInHorizontally(
                 initialOffsetX = { it / 1 },
@@ -94,15 +95,15 @@ fun AppNavGraph(
         // ---------------------------------------------------------
         // SPLASH
         // ---------------------------------------------------------
-        composable(Screen.Splash.route) {
+        composable<Screen.Splash> {
             Splash { loggedIn ->
                 if (loggedIn) {
-                    navController.navigate(Screen.Main.route) {
-                        popUpTo(Screen.Splash.route) { inclusive = true }
+                    navController.navigate(Screen.Main()) {
+                        popUpTo(Screen.Splash) { inclusive = true }
                     }
                 } else {
-                    navController.navigate(Screen.Welcome.route) {
-                        popUpTo(Screen.Splash.route) { inclusive = true }
+                    navController.navigate(Screen.Welcome) {
+                        popUpTo(Screen.Splash) { inclusive = true }
                     }
                 }
             }
@@ -111,34 +112,34 @@ fun AppNavGraph(
         // ---------------------------------------------------------
         // AUTH FLOW
         // ---------------------------------------------------------
-        composable(Screen.Welcome.route) {
+        composable<Screen.Welcome> {
             WelcomeScreen(
-                onNavigateToLogin = { navController.navigate(Screen.Login.route) }
+                onNavigateToLogin = { navController.navigate(Screen.Login) }
             )
         }
 
-        composable(Screen.Login.route) {
+        composable<Screen.Login> {
             LoginScreen(
                 viewModel = authViewModel,
-                onNavigateToOtp = { navController.navigate(Screen.Otp.route) }
+                onNavigateToOtp = { navController.navigate(Screen.Otp) }
             )
         }
 
-        composable(Screen.Otp.route) {
+        composable<Screen.Otp> {
             OtpScreen(
                 authViewModel = authViewModel,
                 onNavigateToCreateProfile = {
-                    navController.navigate(Screen.CreateProfile.route)
+                    navController.navigate(Screen.CreateProfile)
                 },
                 onBack = { navController.popBackStack() }
             )
         }
 
-        composable(Screen.CreateProfile.route) {
+        composable<Screen.CreateProfile> {
             CreateProfileScreen(
                 onCreateAccount = {
-                    navController.navigate(Screen.Splash.route) {
-                        popUpTo(Screen.Welcome.route) { inclusive = true }
+                    navController.navigate(Screen.Splash) {
+                        popUpTo(Screen.Welcome) { inclusive = true }
                     }
                 }
             )
@@ -147,33 +148,33 @@ fun AppNavGraph(
         // ---------------------------------------------------------
         // MAIN (BOTTOM NAV HOST)
         // ---------------------------------------------------------
-        composable(Screen.Main.route) {
-            MainScreen(rootNavController = navController)
+        composable<Screen.Main> { backStackEntry ->
+            val mainRoute = backStackEntry.toRoute<Screen.Main>()
+            MainScreen(rootNavController = navController, startTab = mainRoute.tab)
         }
 
         // ---------------------------------------------------------
         // SCHEDULE FLOW (SHARED VIEWMODEL GRAPH)
         // ---------------------------------------------------------
-        navigation(
-            startDestination = Screen.SchedulePickup.route,
-            route = Screen.ScheduleGraph.route
+        navigation<Screen.ScheduleGraph>(
+            startDestination = Screen.SchedulePickup,
         ) {
 
-            composable(Screen.SchedulePickup.route) { backStackEntry ->
-
-
+            composable<Screen.SchedulePickup> {
                 SchedulePickupScreen(
                     viewModel = hiltViewModel(),
-                    onBack = { navController.popBackStack() },
+                    onBack = {
+                        navController.navigate(Screen.Main(tab = Screen.Main.TAB_SCHEDULE)) {
+                            popUpTo(Screen.Main()) { inclusive = true }
+                        }
+                    },
                     onSelectAddress = {
-                        navController.navigate(Screen.AddAddress.route)
+                        navController.navigate(Screen.AddAddress)
                     }
                 )
             }
 
-            composable(Screen.AddAddress.route) { backStackEntry ->
-
-
+            composable<Screen.AddAddress> {
                 AddAddressScreen(
                     viewModel = hiltViewModel(), // AddAddressViewModel
                     scheduleViewModel = hiltViewModel(),
@@ -187,12 +188,12 @@ fun AppNavGraph(
         // ---------------------------------------------------------
         // OTHER SCREENS
         // ---------------------------------------------------------
-        composable(Screen.AccountSetting.route) {
+        composable<Screen.AccountSetting> {
             AccountSettingsRoute(
                 viewModel = hiltViewModel(),
                 onBack = { navController.popBackStack() },
                 onSignedOut = {
-                    navController.navigate(Screen.Splash.route) {
+                    navController.navigate(Screen.Splash) {
                         popUpTo(0) { inclusive = true } // clears entire back stack
                         launchSingleTop = true
                     }
@@ -200,21 +201,18 @@ fun AppNavGraph(
             )
         }
 
-        composable(Screen.AboutUs.route) {
+        composable<Screen.AboutUs> {
             AboutUsScreen(
                 onBack = { navController.popBackStack() }
             )
         }
 
-        composable(Screen.PickupDetails.route) { backStackEntry ->
-
-            val pid = backStackEntry.arguments?.getString("pid") ?: return@composable
+        composable<Screen.PickupDetails> { backStackEntry ->
+            val details = backStackEntry.toRoute<Screen.PickupDetails>()
             PickupDetailScreen(
-                pid = pid,
+                pid = details.pid,
                 onBack = { navController.popBackStack() }
             )
         }
-
-
     }
 }

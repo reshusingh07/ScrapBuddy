@@ -2,73 +2,102 @@ package com.example.scrapuncle.navigation
 
 
 import com.example.scrapuncle.R
+import kotlinx.serialization.Serializable
 
-sealed class Screen(val route: String) {
+sealed class Screen {
 
-    // Auth / Flow
-    object Splash : Screen("splash")
-    object Welcome : Screen("welcome")
-    object Login : Screen("login")
-    object Otp : Screen("otp")
-    object CreateProfile : Screen("create_profile")
+    @Serializable
+    object Splash
 
-    // Main
-    object Main : Screen("main")
+    @Serializable
+    object Welcome
 
-    // Bottom destinations
-    object Home : Screen("home")
-    object Rate : Screen("rate")
-    object Schedule : Screen("schedule")
-    object Profile : Screen("profile")
+    @Serializable
+    object Login
 
-    // Other screens
-    object ScheduleGraph : Screen("schedule_graph")
-    object AddAddress : Screen("add_address")
-    object SchedulePickup : Screen("schedule_pickup")
-    object AccountSetting : Screen("account_setting")
-    object AboutUs : Screen("about_us")
-    object RateHeader : Screen("rate_header")
+    @Serializable
+    object Otp
 
-    object PickupDetails : Screen("pickup_details/{pid}") {
-        fun createRoute(pid: String): String {
-            return "pickup_details/$pid"
+    @Serializable
+    object CreateProfile
+
+    @Serializable
+    data class Main(val tab: String? = null) {
+        companion object {
+            const val TAB_HOME = "home"
+            const val TAB_RATE = "rate"
+            const val TAB_SCHEDULE = "schedule"
+            const val TAB_PROFILE = "profile"
         }
     }
 
+    // Bottom destinations
+    @Serializable
+    object Home
+
+    @Serializable
+    object Rate
+
+    @Serializable
+    object Schedule
+
+    @Serializable
+    object Profile
+
+    // Other screens
+    @Serializable
+    object ScheduleGraph
+
+    @Serializable
+    object AddAddress
+
+    @Serializable
+    object SchedulePickup
+
+    @Serializable
+    object AccountSetting
+
+    @Serializable
+    object AboutUs
+
+    @Serializable
+    object RateHeader
+
+    @Serializable
+    data class PickupDetails(val pid: String)
+
 }
 
-
 sealed class BottomTab(
-    val route: String,
+    val route: Any,
     val label: String,
     val selectedIcon: Int,
     val unSelectedIcon: Int
-
 ) {
 
     object Home : BottomTab(
-        route = Screen.Home.route,
+        route = Screen.Home,
         label = "Home",
         selectedIcon = R.drawable.icon_selected_house,
         unSelectedIcon = R.drawable.icon_unselected_house,
     )
 
     object Rate : BottomTab(
-        route = Screen.Rate.route,
+        route = Screen.Rate,
         label = "Rate",
         selectedIcon = R.drawable.icon_selected_tag,
         unSelectedIcon = R.drawable.icon_unselected_tag
     )
 
     object Schedule : BottomTab(
-        route = Screen.Schedule.route,
+        route = Screen.Schedule,
         label = "Schedule",
         selectedIcon = R.drawable.icon_selected_pickups,
         unSelectedIcon = R.drawable.icon_unselected_pickups
     )
 
     object Profile : BottomTab(
-        route = Screen.Profile.route,
+        route = Screen.Profile,
         label = "Profile",
         selectedIcon = R.drawable.icon_selected_profile,
         unSelectedIcon = R.drawable.icon_unselected_profile

@@ -30,14 +30,20 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
 
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+
 @Composable
 fun FloatingBottomNavBar(
     navController: NavHostController
 ) {
-    val currentRoute =
-        navController.currentBackStackEntryAsState().value?.destination?.route
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
 
-    val shouldShow = currentRoute in bottomTabs.map { it.route }
+    val shouldShow = bottomTabs.any { tab ->
+        currentDestination?.hierarchy?.any { it.hasRoute(tab.route::class) } == true
+    }
 
     if (!shouldShow) return
 
@@ -69,14 +75,15 @@ fun FloatingBottomNavBar(
             ) {
 
                 bottomTabs.forEach { tab ->
-                    val selected = currentRoute == tab.route
+                    val selected = currentDestination?.hierarchy?.any { it.hasRoute(tab.route::class) } == true
 
                     FloatingNavItem(
                         selected = selected,
                         icon = if (selected) tab.selectedIcon else tab.unSelectedIcon,
                         onClick = {
                             navController.navigate(tab.route) {
-                                popUpTo(navController.graph.startDestinationId) {
+                                val startDestId = navController.graph.findStartDestination().id
+                                popUpTo(startDestId) {
                                     saveState = true
                                 }
                                 launchSingleTop = true
@@ -119,21 +126,22 @@ fun FloatingNavItem(
 fun BottomNavBar(
     navController: NavHostController
 ) {
-    val currentBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = currentBackStackEntry?.destination?.route
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
 
     NavigationBar(
         containerColor = Color.White, tonalElevation = 0.dp
     ) {
         bottomTabs.forEach { tab ->
 
-            val selected = currentRoute == tab.route
+            val selected = currentDestination?.hierarchy?.any { it.hasRoute(tab.route::class) } == true
 
             NavigationBarItem(
                 selected = selected,
                 onClick = {
                     navController.navigate(tab.route) {
-                        popUpTo(navController.graph.startDestinationId) {
+                        val startDestId = navController.graph.findStartDestination().id
+                        popUpTo(startDestId) {
                             saveState = true
                         }
                         launchSingleTop = true

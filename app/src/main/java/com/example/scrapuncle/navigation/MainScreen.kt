@@ -11,9 +11,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun MainScreen(rootNavController: NavHostController) {
+fun MainScreen(rootNavController: NavHostController, startTab: String? = null) {
 
     val bottomNavController = rememberNavController()
+
+    // Map the string tab back to a type-safe object
+    val startDestination: Any = when (startTab) {
+        Screen.Main.TAB_SCHEDULE -> Screen.Schedule
+        Screen.Main.TAB_RATE -> Screen.Rate
+        Screen.Main.TAB_PROFILE -> Screen.Profile
+        else -> Screen.Home
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -21,6 +29,7 @@ fun MainScreen(rootNavController: NavHostController) {
         MainNavGraph(
             navController = bottomNavController,
             rootNavController = rootNavController,
+            startDestination = startDestination,
             modifier = Modifier.padding(bottom = 90.dp) // space for floating bar
         )
 
