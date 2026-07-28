@@ -1,0 +1,41 @@
+appId: com.example.scrapuncle
+name: Bottom tab navigation
+tags:
+  - smoke
+---
+# The bottom bar is FloatingBottomNavBar: icon-only items whose only accessibility
+# text is the icon contentDescription ("Home tab", "Rate tab", ...). Those labels are
+# what the taps below match on.
+- launchApp
+
+# Splash animates for ~2.8s, then routes to Main (signed in) or Welcome (signed out).
+# The bottom tabs only exist on Main, so this flow needs a signed-in session on the
+# device. If it fails here, sign in first (phone + OTP) and re-run.
+- extendedWaitUntil:
+    visible: "Hello 👋"
+    timeout: 20000
+    label: "Wait out splash and land on Home"
+
+- tapOn: "Rate tab"
+- extendedWaitUntil:
+    visible: "Check Rates"
+    timeout: 10000
+    label: "Rate screen shown"
+
+- tapOn: "Schedule tab"
+- extendedWaitUntil:
+    visible: "View or schedule your scrap pickup"
+    timeout: 10000
+    label: "Pickup screen shown"
+
+- tapOn: "Profile tab"
+- extendedWaitUntil:
+    visible: "Account Settings"
+    timeout: 10000
+    label: "Profile screen shown"
+
+- tapOn: "Home tab"
+- extendedWaitUntil:
+    visible: "Hello 👋"
+    timeout: 10000
+    label: "Back on Home"

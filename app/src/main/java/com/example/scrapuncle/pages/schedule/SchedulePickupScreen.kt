@@ -122,6 +122,15 @@ fun SchedulePickupScreen(
         }
     }
 
+    // Submit failures only land in state.error; surface them so a failed pickup
+    // is not silent (the screen stays put, no navigation).
+    LaunchedEffect(state.error) {
+        state.error?.let { msg ->
+            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+            viewModel.clearError()
+        }
+    }
+
 //    LaunchedEffect(Unit) {
 //        viewModel.uiEvents.collect { event ->
 //            when (event) {

@@ -1,0 +1,136 @@
+appId: com.example.scrapuncle
+name: Create three pickups with the same address
+tags:
+  - pickup
+---
+# Creates 3 pickups one after another, each with a different date, time slot and
+# weight, all on the address that is ALREADY selected on the form. The flow never
+# taps "Change", so the address comes from lastSelectedAddressId every time.
+#
+# Requires a signed-in device that already has at least one saved address.
+#
+# Notes on the two selectors that look odd:
+#  * Dates: the strip is a LazyRow of today..today+6, so day numbers change daily.
+#    Matching '^\d{1,2}$' by index picks "today + index" without hardcoding a date.
+#  * Submit: tapping the "SCHEDULE PICKUP" text does not trigger the Button's
+#    onClick, so the button is tapped by point instead.
+
+- launchApp
+- extendedWaitUntil:
+    visible: "Hello 👋"
+    timeout: 25000
+    label: "Wait out splash and land on Home"
+
+# ------------------------------------------------------------------
+# Pickup 1 - today, 11:30 AM slot, 0-10 Kgs
+# ------------------------------------------------------------------
+- tapOn: "SCHEDULE A PICKUP"
+- extendedWaitUntil:
+    visible: "Estimated Weight"
+    timeout: 15000
+    label: "Schedule Pickup form open"
+
+# "Change" only renders when an address is already selected; remember which one
+# it is so pickups 2 and 3 can be checked against it.
+- extendedWaitUntil:
+    visible: "Change"
+    timeout: 15000
+    label: "Pre-selected address loaded"
+- assertNotVisible:
+    text: "Create Address"
+    label: "An address is already selected"
+- copyTextFrom:
+    text: '^Pincode.*'
+    label: "Remember the pre-selected address"
+
+- tapOn:
+    text: '^\d{1,2}$'
+    index: "0"
+    label: "Date: today"
+- tapOn: "11:30 AM to 1:30 PM"
+- tapOn: "0-10 Kgs"
+
+- assertVisible:
+    text: "SCHEDULE PICKUP"
+    label: "Submit button ready"
+- tapOn:
+    point: "50%,84%"
+    label: "SCHEDULE PICKUP"
+- extendedWaitUntil:
+    visible: "Hello 👋"
+    timeout: 30000
+    label: "Pickup 1 created, navigated back to Home"
+
+# ------------------------------------------------------------------
+# Pickup 2 - tomorrow, 2:30 PM slot, 30-50 Kgs
+# ------------------------------------------------------------------
+- tapOn: "SCHEDULE A PICKUP"
+- extendedWaitUntil:
+    visible: "Estimated Weight"
+    timeout: 15000
+    label: "Schedule Pickup form open"
+- extendedWaitUntil:
+    visible: ${maestro.copiedText}
+    timeout: 15000
+    label: "Same address still selected"
+- assertNotVisible: "Create Address"
+
+- tapOn:
+    text: '^\d{1,2}$'
+    index: "1"
+    label: "Date: today + 1"
+- tapOn: "2:30 PM to 4:30 PM"
+- tapOn: "30-50 Kgs"
+
+- assertVisible:
+    text: "SCHEDULE PICKUP"
+    label: "Submit button ready"
+- tapOn:
+    point: "50%,84%"
+    label: "SCHEDULE PICKUP"
+- extendedWaitUntil:
+    visible: "Hello 👋"
+    timeout: 30000
+    label: "Pickup 2 created, navigated back to Home"
+
+# ------------------------------------------------------------------
+# Pickup 3 - day after tomorrow, 4:30 PM slot, More than 200 Kgs
+# ------------------------------------------------------------------
+- tapOn: "SCHEDULE A PICKUP"
+- extendedWaitUntil:
+    visible: "Estimated Weight"
+    timeout: 15000
+    label: "Schedule Pickup form open"
+- extendedWaitUntil:
+    visible: ${maestro.copiedText}
+    timeout: 15000
+    label: "Same address still selected"
+- assertNotVisible: "Create Address"
+
+- tapOn:
+    text: '^\d{1,2}$'
+    index: "2"
+    label: "Date: today + 2"
+- tapOn: "4:30 PM to 7:00 PM"
+- tapOn: "More than 200 Kgs"
+
+- assertVisible:
+    text: "SCHEDULE PICKUP"
+    label: "Submit button ready"
+- tapOn:
+    point: "50%,84%"
+    label: "SCHEDULE PICKUP"
+- extendedWaitUntil:
+    visible: "Hello 👋"
+    timeout: 30000
+    label: "Pickup 3 created, navigated back to Home"
+
+# ------------------------------------------------------------------
+# All three should now be in the pickup list
+# ------------------------------------------------------------------
+- tapOn: "Schedule tab"
+- extendedWaitUntil:
+    visible: "View or schedule your scrap pickup"
+    timeout: 15000
+- assertNotVisible: "No pickups found"
+- takeScreenshot: three-pickups-created

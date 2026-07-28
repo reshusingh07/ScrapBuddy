@@ -178,6 +178,10 @@ class ScheduleViewModel @Inject constructor(
         return null
     }
 
+    fun clearError() {
+        update { copy(error = null) }
+    }
+
 
 //    fun reloadAddresses() = viewModelScope.launch {
 //        loadAddresses()

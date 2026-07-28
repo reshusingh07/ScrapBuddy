@@ -1,5 +1,6 @@
 package com.example.scrapuncle.auth.repositoryImpl
 
+import android.util.Log
 import com.example.scrapuncle.auth.data.Address
 import com.example.scrapuncle.auth.data.Pickup
 import com.example.scrapuncle.auth.repo.ScheduleRepository
@@ -55,12 +56,23 @@ class ScheduleRepositoryImpl @Inject constructor(
                 "createdAt" to FieldValue.serverTimestamp()
             )
 
+            // Source of truth: everything the app reads comes from this subcollection
+            // (see getUserPickups / getUserPickupsOnce).
             docRef.set(pickup).await()
 
-            firestore.collection("pickups")
-                .document(pickup["id"].toString())
-                .set(pickup)
-                .await()
+            // Best-effort denormalised copy for back-office queries. Nothing in the app
+            // reads it, so failing to mirror must not fail a pickup that has already been
+            // created for the user — otherwise the caller sees Result.failure and the
+            // "pickup scheduled" event is never emitted.
+            try {
+                firestore.collection("pickups")
+                    .document(docRef.id)
+                    .set(pickup)
+                    .await()
+            } catch (e: Exception) {
+                Log.w("ScheduleRepo", "Failed to mirror pickup ${docRef.id} to top-level collection", e)
+            }
+
             Result.success(Unit)
 
         } catch (e: Exception) {
