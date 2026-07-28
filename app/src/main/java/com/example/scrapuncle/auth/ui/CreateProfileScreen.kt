@@ -1,7 +1,5 @@
 package com.example.scrapuncle.auth.ui
 
-import android.R.attr.scaleX
-import android.R.attr.scaleY
 import android.widget.Toast
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -12,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,12 +19,12 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -46,7 +43,6 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -85,10 +81,6 @@ fun CreateProfileScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     val context = LocalContext.current
-    val keyboardOpen = isKeyboardOpen()
-
-
-
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
@@ -128,19 +120,11 @@ fun CreateProfileScreen(
                     scrolledContainerColor = Color.White
                 )
             )
-        },
-        floatingActionButton = {
-            StickyFab(
-                isKeyboardOpen = keyboardOpen,
-                loading = uiState.submissionInProgress,
-                onClick = viewModel::onSubmit
-            )
         }
     ) { padding ->
 
         ProfileForm(
             uiState = uiState,
-            isKeyboardOpen = keyboardOpen,
             padding = padding,
             viewModel = viewModel,
             isLoading = uiState.submissionInProgress
@@ -149,48 +133,8 @@ fun CreateProfileScreen(
 }
 
 @Composable
-private fun StickyFab(
-    isKeyboardOpen: Boolean,
-    loading: Boolean,
-    onClick: () -> Unit
-) {
-//    if (!isKeyboardOpen) return
-
-    FloatingActionButton(
-        onClick = onClick,
-        modifier = Modifier
-            .imePadding()
-            .graphicsLayer {
-            alpha = if (isKeyboardOpen) 1f else 0f
-            scaleX = if (isKeyboardOpen) 1f else 0.85f
-            scaleY = if (isKeyboardOpen) 1f else 0.85f
-        },
-        shape = RoundedCornerShape(50.dp),
-
-        containerColor = Color(0xFF00A651)
-    ) {
-        if (loading) {
-            CircularProgressIndicator(
-                color = White,
-                strokeWidth = 2.dp,
-                modifier = Modifier.size(22.dp)
-            )
-        } else {
-            Icon(
-                painter = painterResource(R.drawable.icon_arrow_right),
-                contentDescription = null,
-                tint = White,
-                modifier = Modifier.size(24.dp)
-            )
-        }
-    }
-}
-
-
-@Composable
 private fun ProfileForm(
     uiState: CreateProfileUiState,
-    isKeyboardOpen: Boolean,
     padding: PaddingValues,
     viewModel: ProfileViewModel,
     isLoading: Boolean
@@ -393,7 +337,35 @@ private fun ProfileForm(
             }
         }
         item {
-            Spacer(modifier = Modifier.height(350.dp))
+            Button(
+                onClick = viewModel::onSubmit,
+                enabled = !isLoading,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(52.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = lightGreen,
+                    contentColor = White
+                )
+            ) {
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        color = White,
+                        strokeWidth = 2.dp,
+                        modifier = Modifier.size(22.dp)
+                    )
+                } else {
+                    Text(
+                        text = "Create Account",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            }
+        }
+        item {
+            Spacer(modifier = Modifier.height(24.dp))
         }
 
     }

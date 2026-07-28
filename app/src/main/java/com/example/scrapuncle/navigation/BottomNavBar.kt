@@ -73,6 +73,7 @@ fun FloatingBottomNavBar(
 
                     FloatingNavItem(
                         selected = selected,
+                        label = tab.label,
                         icon = if (selected) tab.selectedIcon else tab.unSelectedIcon,
                         onClick = {
                             navController.navigate(tab.route) {
@@ -94,6 +95,7 @@ fun FloatingBottomNavBar(
 @Composable
 fun FloatingNavItem(
     selected: Boolean,
+    label: String,
     icon: Int,
     onClick: () -> Unit
 ) {
@@ -107,7 +109,9 @@ fun FloatingNavItem(
     ) {
         Icon(
             painter = painterResource(id = icon),
-            contentDescription = null,
+            // "<label> tab" rather than bare "<label>" so it can't collide with
+            // screen content ("Check Rates", the Home avatar's "Profile", ...)
+            contentDescription = "$label tab",
             tint = if (selected) Color.White else Color.Gray,
             modifier = Modifier.size(18.dp)
         )
