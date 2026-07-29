@@ -71,18 +71,11 @@ jobs:
           script: |
             set -eu
             adb wait-for-device
-            until [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" = "1" ]; do
-              sleep 5
-            done
 
             adb install -r app/build/outputs/apk/debug/app-debug.apk
 
             mkdir -p maestro-artifacts/logs maestro-artifacts/reports
-            maestro test .maestro \
-              --format junit \
-              --output maestro-artifacts/reports/maestro-report.xml \
-              --debug-output maestro-artifacts \
-              > maestro-artifacts/logs/maestro.log 2>&1
+            maestro test .maestro --format junit --output maestro-artifacts/reports/maestro-report.xml --debug-output maestro-artifacts > maestro-artifacts/logs/maestro.log 2>&1
 
             cat maestro-artifacts/logs/maestro.log
 
