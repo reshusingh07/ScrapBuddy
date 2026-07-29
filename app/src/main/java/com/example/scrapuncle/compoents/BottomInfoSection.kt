@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -41,7 +42,7 @@ fun BottomInfoSection() {
                 .fillMaxWidth()
                 .height(42.dp) // You can increase/decrease height as needed
                 .clip(RoundedCornerShape(12.dp)) // Rounded corners
-                .background(Color(0xFFE5E5A6)), // Light yellow background
+                .background(MaterialTheme.colorScheme.tertiaryContainer),
             contentAlignment = Alignment.Center // Centers the text in Box
         ) {
             Text(
@@ -51,7 +52,7 @@ fun BottomInfoSection() {
                 fontFamily = InterFontFamily,
                 fontWeight = FontWeight.Medium,
 //                fontWeight = FontWeight.Medium,
-                color = Color(0xFF333322).copy(alpha = 0.8f), // Brown color
+                color = MaterialTheme.colorScheme.onTertiaryContainer,
                 textAlign = TextAlign.Center
             )
         }
@@ -62,7 +63,7 @@ fun BottomInfoSection() {
         Text(
             text = "45,39,110 Kg",
             fontSize = 20.sp,
-            color = Color.Black,
+            color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.padding(vertical = 4.dp),
             textAlign = TextAlign.Start
         )
@@ -71,7 +72,7 @@ fun BottomInfoSection() {
             fontFamily = InterFontFamily,
             fontWeight = FontWeight.Light,
             fontSize = 16.sp,
-            color = Color.Gray,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Start
         )
 

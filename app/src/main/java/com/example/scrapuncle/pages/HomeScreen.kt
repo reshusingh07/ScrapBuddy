@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -152,14 +153,14 @@ fun HomeHeader(
                 text = "Hello 👋",
                 fontFamily = InterFontFamily,
                 fontSize = 13.sp,
-                color = Color.DarkGray.copy(alpha = 0.82f)
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
                 text = userName,
                 fontFamily = InterFontFamily,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Medium,
-                color = Color.Black.copy(alpha = 0.84f)
+                color = MaterialTheme.colorScheme.onBackground
             )
         }
 
@@ -170,7 +171,7 @@ fun HomeHeader(
             modifier = Modifier
                 .size(40.dp)
                 .clip(CircleShape)
-                .background(Color.LightGray.copy(alpha = 0.12f))
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .clickable {},
             contentAlignment = Alignment.Center
         ) {

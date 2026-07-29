@@ -191,12 +191,21 @@ fun AppNavGraph(
             AccountSettingsRoute(
                 viewModel = hiltViewModel(),
                 onBack = { navController.popBackStack() },
+                onNavigateToAppearance = {
+                    navController.navigate(Screen.Appearance.route)
+                },
                 onSignedOut = {
                     navController.navigate(Screen.Splash.route) {
                         popUpTo(0) { inclusive = true } // clears entire back stack
                         launchSingleTop = true
                     }
                 }
+            )
+        }
+
+        composable(Screen.Appearance.route) {
+            com.example.scrapuncle.auth.ui.AppearanceRoute(
+                onBack = { navController.popBackStack() }
             )
         }
 

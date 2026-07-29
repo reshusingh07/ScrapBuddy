@@ -82,8 +82,8 @@ fun LoginScreen(
             .background(
                 brush = Brush.verticalGradient(
                     listOf(
-                        Color(0xFFFFFFFF),
-                        Color(0xFFFFFFFF)
+                        MaterialTheme.colorScheme.background,
+                        MaterialTheme.colorScheme.background
                     )
                 )
             )
@@ -126,7 +126,7 @@ fun LoginScreen(
                     Text(
                         "Phone number",
                         style = MaterialTheme.typography.labelMedium,
-                        color = Color(0xFF333333)
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 },
                 modifier = Modifier
@@ -149,7 +149,7 @@ fun LoginScreen(
                             modifier = Modifier
                                 .width(1.dp)
                                 .height(24.dp)
-                                .background(Color.LightGray)
+                                .background(MaterialTheme.colorScheme.outline)
                         )
                         Spacer(Modifier.width(10.dp))
                     }
@@ -194,7 +194,7 @@ fun LoginScreen(
             ) {
                 if (isLoading) {
                     CircularProgressIndicator(
-                        color = Color.White.copy(alpha = 0.9f),
+                        color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.9f),
                         strokeWidth = 3.dp,
                         modifier = Modifier.size(22.dp)
                     )
@@ -202,7 +202,7 @@ fun LoginScreen(
                     Text(
                         text = "Continue",
                         fontSize = 15.sp,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
 

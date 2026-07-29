@@ -76,6 +76,7 @@ import com.example.scrapuncle.ui.theme.Green80
 fun AccountSettingsRoute(
     viewModel: AccountSettingsViewModel = hiltViewModel(),
     onBack: () -> Unit,
+    onNavigateToAppearance: () -> Unit = {},
 //    onProfileSaved: () -> Unit,
     onSignedOut: () -> Unit
 ) {
@@ -109,6 +110,7 @@ fun AccountSettingsRoute(
         onBack = onBack,
         onFullNameChange = viewModel::onFullNameChanged,
         onEmailChange = viewModel::onEmailChanged,
+        onNavigateToAppearance = onNavigateToAppearance,
         onSave = viewModel::onSaveClicked,
         onSignOut = viewModel::onSignOutClicked
     )
@@ -123,6 +125,7 @@ fun AccountSettingsScreen(
     onBack: () -> Unit,
     onFullNameChange: (String) -> Unit,
     onEmailChange: (String) -> Unit,
+    onNavigateToAppearance: () -> Unit = {},
     onSave: () -> Unit,
     onSignOut: () -> Unit
 ) {
@@ -130,9 +133,9 @@ fun AccountSettingsScreen(
 
 
     val keyboardOpen = isKeyboardOpen()
-    val borderColor = Color.LightGray.copy(alpha = 0.55f)
+    val borderColor = MaterialTheme.colorScheme.outline
     var showSignOutDialog by remember { mutableStateOf(false) }
-    val saveColor = if (uiState.isSaveEnabled) Green80 else Color(0xFFBFBFBF)
+    val saveColor = if (uiState.isSaveEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
 
     val scale by animateFloatAsState(
         targetValue = if (keyboardOpen) 0.85f else 1f,
@@ -171,7 +174,7 @@ fun AccountSettingsScreen(
                             .size(30.dp)
                             .clip(RoundedCornerShape(7.dp))
                             .background(
-                                color = Color.LightGray.copy(alpha = 0.12f),
+                                color = MaterialTheme.colorScheme.surfaceVariant,
                                 shape = RoundedCornerShape(7.dp)
                             )
                             .clickable(
@@ -183,14 +186,14 @@ fun AccountSettingsScreen(
                         Icon(
                             painter = painterResource(R.drawable.icon_arrow_back),
                             contentDescription = "Back",
-                            tint = Black.copy(alpha = 0.58f),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                     Spacer(Modifier.weight(1f))
                     Text(
                         text = "Account Settings",
                         fontWeight = FontWeight.SemiBold,
-                        color = Black.copy(alpha = 0.92f),
+                        color = MaterialTheme.colorScheme.onBackground,
                         fontSize = 20.sp,
                         style = MaterialTheme.typography.titleLarge
                     )
@@ -216,7 +219,7 @@ fun AccountSettingsScreen(
                             Icon(
                                 painter = painterResource(id = R.drawable.icon_profile),
                                 contentDescription = null,
-                                tint = Color.Gray,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.size(16.dp)
                             )
                         },
@@ -251,7 +254,7 @@ fun AccountSettingsScreen(
                             Icon(
                                 painter = painterResource(id = R.drawable.icon_email),
                                 contentDescription = null,
-                                tint = Color.Gray,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.size(16.dp)
                             )
                         },
@@ -288,14 +291,14 @@ fun AccountSettingsScreen(
                             Icon(
                                 painter = painterResource(id = R.drawable.icon_phone_cal),
                                 contentDescription = null,
-                                tint = Color.Gray,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.size(16.dp)
                             )
                         },
                         colors = OutlinedTextFieldDefaults.colors(
-                            unfocusedContainerColor = Color.Gray.copy(alpha = 0.7f),
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                             focusedContainerColor = Color.Transparent,
-                            unfocusedBorderColor = Color.LightGray.copy(alpha = 0.4f),
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
                             cursorColor = Color.Transparent
                         ),
                         shape = RoundedCornerShape(10.dp),
@@ -303,9 +306,14 @@ fun AccountSettingsScreen(
                     )
                 }
                 Spacer(modifier = Modifier.height(2.dp))
-                Text("Phone number cannot be changed", fontSize = 12.sp, color = Color.Gray)
+                Text("Phone number cannot be changed", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
                 Spacer(Modifier.height(32.dp))
+            }
+
+            item {
+                AppearanceCard(onClick = onNavigateToAppearance)
+                Spacer(Modifier.height(16.dp))
             }
 
             item {
@@ -320,7 +328,7 @@ fun AccountSettingsScreen(
                     ExtendedFloatingActionButton(
                         onClick = onSave,
                         containerColor = saveColor,
-                        contentColor = if (uiState.isSaveEnabled) White else Color.DarkGray,
+                        contentColor = if (uiState.isSaveEnabled) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier
                             .padding(bottom = 20.dp)
                             .imePadding()
@@ -405,8 +413,8 @@ fun SignOutCard(onSignOut: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFFFF1F1).copy(alpha = 0.1f), RoundedCornerShape(12.dp))
-            .border(1.dp, Color(0xFFFF9C9C).copy(alpha = 0.5f), RoundedCornerShape(12.dp))
+            .background(MaterialTheme.colorScheme.error.copy(alpha = 0.08f), RoundedCornerShape(12.dp))
+            .border(1.dp, MaterialTheme.colorScheme.error.copy(alpha = 0.45f), RoundedCornerShape(12.dp))
             .clickable(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
@@ -420,7 +428,7 @@ fun SignOutCard(onSignOut: () -> Unit) {
             Icon(
                 painter = painterResource(id = R.drawable.icon_logout),
                 contentDescription = "Logout",
-                tint = Color.Red.copy(alpha = 0.75f),
+                tint = MaterialTheme.colorScheme.error,
                 modifier = Modifier.size(20.dp)
             )
 
@@ -431,13 +439,13 @@ fun SignOutCard(onSignOut: () -> Unit) {
                     text = "Sign Out",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = Color.Red.copy(0.85f),
+                    color = MaterialTheme.colorScheme.error,
                     lineHeight = 22.sp
                 )
                 Text(
                     text = "Sign out from this device",
                     fontSize = 13.sp,
-                    color = Color.Red.copy(alpha = 0.7f),
+                    color = MaterialTheme.colorScheme.error.copy(alpha = 0.8f),
                     lineHeight = 20.sp
                 )
             }
@@ -447,7 +455,7 @@ fun SignOutCard(onSignOut: () -> Unit) {
             Icon(
                 painter = painterResource(id = R.drawable.icon_arrow_right_ios),
                 contentDescription = "Next",
-                tint = Color.Red.copy(alpha = 0.75f),
+                tint = MaterialTheme.colorScheme.error,
                 modifier = Modifier.size(24.dp)
             )
         }
@@ -465,13 +473,67 @@ fun FabTransitionAnimation(visible: Boolean, content: @Composable () -> Unit) {
 }
 
 @Composable
+fun AppearanceCard(onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(12.dp))
+            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ) {
+                onClick()
+            }
+            .padding(15.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+
+            Icon(
+                painter = painterResource(id = R.drawable.icon_setting),
+                contentDescription = "Appearance",
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(20.dp)
+            )
+
+            Spacer(modifier = Modifier.width(15.dp))
+
+            Column {
+                Text(
+                    text = "Appearance & Theme",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    lineHeight = 22.sp
+                )
+                Text(
+                    text = "Choose Dark, Light, or System Default",
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    lineHeight = 20.sp
+                )
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Icon(
+                painter = painterResource(id = R.drawable.icon_arrow_right_ios),
+                contentDescription = "Next",
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(24.dp)
+            )
+        }
+    }
+}
+
+@Composable
 fun inputColor(borderColor: Color) = OutlinedTextFieldDefaults.colors(
     unfocusedContainerColor = Color.Transparent,
     focusedContainerColor = Color.Transparent,
     focusedBorderColor = borderColor,
     unfocusedBorderColor = borderColor,
     focusedLabelColor = Black,
-    unfocusedLabelColor = Color.Gray,
+    unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
     cursorColor = Black
 )
 

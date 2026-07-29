@@ -184,7 +184,7 @@ fun SchedulePickupScreen(
                     modifier = Modifier
                         .padding(2.dp)
                         .background(
-                            Color.LightGray.copy(alpha = 0.12f),
+                            MaterialTheme.colorScheme.surfaceVariant,
                             RoundedCornerShape(7.dp)
                         )
                         .size(26.dp)
@@ -197,7 +197,7 @@ fun SchedulePickupScreen(
                     Icon(
                         painter = painterResource(R.drawable.icon_arrow_back),
                         contentDescription = "Back",
-                        tint = Black.copy(alpha = 0.58f),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
 
@@ -206,7 +206,7 @@ fun SchedulePickupScreen(
                     text = "Schedule Pickup",
                     fontFamily = InterFontFamily,
                     fontWeight = FontWeight.SemiBold,
-                    color = Black.copy(alpha = 0.94f),
+                    color = MaterialTheme.colorScheme.onBackground,
                     fontSize = 20.sp,
                     style = MaterialTheme.typography.titleLarge
                 )
@@ -236,7 +236,7 @@ fun SchedulePickupScreen(
                         Icon(
                             painter = painterResource(id = R.drawable.icon_calendar),
                             contentDescription = null,
-                            tint = Color.DarkGray.copy(alpha = 1.1f),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(20.dp)
                         )
 
@@ -245,7 +245,7 @@ fun SchedulePickupScreen(
                             fontFamily = InterFontFamily,
                             fontWeight = FontWeight.W500,
                             fontSize = 15.sp,
-                            color = Color.DarkGray.copy(alpha = 1.4f)
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 }
@@ -274,7 +274,7 @@ fun SchedulePickupScreen(
                         Icon(
                             painter = painterResource(id = R.drawable.icon_clock),
                             contentDescription = null,
-                            tint = Color.DarkGray.copy(alpha = 1.1f),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(20.dp)
                         )
 
@@ -283,7 +283,7 @@ fun SchedulePickupScreen(
                             fontFamily = InterFontFamily,
                             fontWeight = FontWeight.W500,
                             fontSize = 15.sp,
-                            color = Color.DarkGray.copy(alpha = 1.4f)
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 }
@@ -326,7 +326,7 @@ fun SchedulePickupScreen(
                         Icon(
                             painter = painterResource(id = R.drawable.icon_weight),
                             contentDescription = null,
-                            tint = Color.DarkGray.copy(alpha = 1.1f),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(20.dp)
                         )
 
@@ -335,7 +335,7 @@ fun SchedulePickupScreen(
                             fontFamily = InterFontFamily,
                             fontWeight = FontWeight.W500,
                             fontSize = 15.sp,
-                            color = Color.DarkGray.copy(alpha = 1.4f)
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 }
@@ -379,7 +379,7 @@ fun SchedulePickupScreen(
                         Icon(
                             painter = painterResource(id = R.drawable.icon_location),
                             contentDescription = "Select Address",
-                            tint = Color.DarkGray.copy(alpha = 1.1f),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(20.dp)
                         )
 
@@ -388,7 +388,7 @@ fun SchedulePickupScreen(
                             fontFamily = InterFontFamily,
                             fontWeight = FontWeight.W500,
                             fontSize = 15.sp,
-                            color = Color.DarkGray.copy(alpha = 1.4f)
+                            color = MaterialTheme.colorScheme.onBackground
                         )
 
                         Spacer(modifier = Modifier.weight(1f))
@@ -410,14 +410,14 @@ fun SchedulePickupScreen(
                                     painter = painterResource(id = R.drawable.icon_pencil),
                                     contentDescription = null,
                                     modifier = Modifier.size(16.dp),
-                                    tint = Color(0xFF007AFF).copy(alpha = 0.78f)
+                                    tint = MaterialTheme.colorScheme.primary
                                 )
 
                                 Text(
                                     text = "Change",
                                     fontFamily = InterFontFamily,
                                     fontSize = 14.sp,
-                                    color = Color(0xFF007AFF).copy(alpha = 0.8f)
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                             }
                         }
@@ -483,12 +483,12 @@ fun SchedulePickupScreen(
                             .padding(horizontal = 12.dp)
                             .heightIn(min = 48.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF00A651)
+                            containerColor = MaterialTheme.colorScheme.primary
                         )
                     ) {
                         if (isSubmitting) {
                             CircularProgressIndicator(
-                                color = White,
+                                color = MaterialTheme.colorScheme.onPrimary,
                                 strokeWidth = 2.dp,
                                 modifier = Modifier.size(22.dp),
                             )
@@ -497,7 +497,7 @@ fun SchedulePickupScreen(
                                 "SCHEDULE PICKUP",
                                 fontFamily = InterFontFamily,
                                 fontWeight = FontWeight.Bold,
-                                color = White,
+                                color = MaterialTheme.colorScheme.onPrimary,
                                 fontSize = 15.sp
                             )
                         }
@@ -523,9 +523,9 @@ fun CreateAddressButton(onClick: () -> Unit) {
                 .heightIn(min = 36.dp),
             shape = RoundedCornerShape(10.dp),
             colors = ButtonDefaults.outlinedButtonColors(
-                containerColor = Color.White
+                containerColor = MaterialTheme.colorScheme.surfaceVariant
             ),
-            border = BorderStroke(1.dp, Color(0xFF00A651))
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -535,9 +535,9 @@ fun CreateAddressButton(onClick: () -> Unit) {
                     Icons.Filled.LocationOn,
                     contentDescription = null,
                     modifier = Modifier.size(18.dp),
-                    tint = Color(0xFF00A651)
+                    tint = MaterialTheme.colorScheme.primary
                 )
-                Text("Create Address",  fontFamily = InterFontFamily, color = Color(0xFF00A651))
+                Text("Create Address",  fontFamily = InterFontFamily, color = MaterialTheme.colorScheme.primary)
             }
         }
     }

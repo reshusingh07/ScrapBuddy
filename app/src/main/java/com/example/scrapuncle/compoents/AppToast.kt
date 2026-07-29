@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -63,7 +64,7 @@ fun AppToast(
             modifier = Modifier
                 .padding(horizontal = 10.dp, vertical = 6.dp)
                 .shadow(6.dp, RoundedCornerShape(14.dp))
-                .background(Color.White, RoundedCornerShape(14.dp)),
+                .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(14.dp)),
             contentAlignment = Alignment.Center
         ) {
             Row(
@@ -74,7 +75,7 @@ fun AppToast(
                     Icon(
                         painter = painterResource(id = resId),
                         contentDescription = null,
-                        tint = Color(0xFF00A651),
+                        tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(22.dp)
                     )
 
@@ -84,7 +85,7 @@ fun AppToast(
                         text = message,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
-                        color = Color.Black.copy(0.75f),
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
             }

@@ -89,7 +89,7 @@ fun AboutUsScreen(
                                 .size(30.dp)
                                 .clip(RoundedCornerShape(7.dp))
                                 .background(
-                                    color = Color.LightGray.copy(alpha = 0.12f),
+                                    color = MaterialTheme.colorScheme.surfaceVariant,
                                     shape = RoundedCornerShape(7.dp)
                                 )
                                 .clickable(
@@ -336,7 +336,7 @@ private fun InfoCard(
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = Color.DarkGray,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(24.dp)
                 )
                 Text(
@@ -366,7 +366,7 @@ private fun InfoRow(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = Color.DarkGray.copy(alpha = 0.7f),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(20.dp)
         )
         Text(
@@ -439,7 +439,7 @@ private fun ContactItem(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = Color.DarkGray.copy(alpha = 0.7f),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(20.dp)
         )
         Column(

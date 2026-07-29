@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -42,6 +43,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.scrapuncle.auth.data.Address
 import com.example.scrapuncle.ui.theme.InterFontFamily
+import com.example.scrapuncle.ui.theme.StatusCancelled
+import com.example.scrapuncle.ui.theme.StatusCompleted
+import com.example.scrapuncle.ui.theme.StatusPending
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -73,7 +77,7 @@ fun PickupCard(
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         modifier = modifier
             .fillMaxWidth()
@@ -113,7 +117,7 @@ fun PickupCard(
                     fontFamily = InterFontFamily,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = Color(0xFF1F1F1F)
+                    color = MaterialTheme.colorScheme.onBackground
                 )
 
                 Spacer(Modifier.weight(1f))
@@ -129,7 +133,7 @@ fun PickupCard(
                 fontSize = 13.sp,
                 lineHeight = 21.sp,
                 fontWeight = FontWeight.Normal,
-                color = Color.Black.copy(alpha = 0.7f)
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             // ---------- SLOT ----------
@@ -150,14 +154,14 @@ fun PickupCard(
                             imageVector = Icons.Default.AccessTime,
                             contentDescription = null,
                             modifier = Modifier.size(13.dp),
-                            tint = Color(0xFF6B6B6B)
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Spacer(Modifier.width(4.dp))
                         Text(
                             text = slot,
                             fontFamily = InterFontFamily,
                             fontSize = 12.sp,
-                            color = Color.Black.copy(alpha = 0.6f)
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
 
@@ -166,7 +170,7 @@ fun PickupCard(
                         text = " PID • $pid",
                         fontFamily = InterFontFamily,
                         fontSize = 11.sp,
-                        color = Color.Black.copy(alpha = 0.45f)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                     )
                 }
 
@@ -192,9 +196,9 @@ fun PickupCard(
 fun StatusChip(status: String) {
 
     val (color, icon) = when (status) {
-        "Completed" -> Color(0xFF2E7D32) to Icons.Default.CheckCircle
-        "Cancelled" -> Color(0xFFC62828) to Icons.Default.Cancel
-        else -> Color(0xFF1565C0) to Icons.Default.Schedule
+        "Completed" -> StatusCompleted to Icons.Default.CheckCircle
+        "Cancelled" -> StatusCancelled to Icons.Default.Cancel
+        else -> StatusPending to Icons.Default.Schedule
     }
 
     Row(

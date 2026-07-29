@@ -1,0 +1,33 @@
+appId: com.example.scrapuncle
+name: Cold start reaches the first screen
+tags:
+  - ci
+---
+# The only flow in this workspace that a clean CI emulator can actually run.
+#
+# It covers what CI can genuinely verify: the APK installs, the process starts,
+# Hilt/Firebase initialise without crashing, Splash resolves its auth check, and the
+# signed-out route (Welcome -> Login) renders.
+#
+# It deliberately stops at the phone-number field. Everything past that needs a real
+# Firebase phone sign-in (SMS OTP), which no ephemeral CI emulator can satisfy - see
+# flow.yaml and create-three-pickups.yaml, which are tagged for local runs instead.
+#
+# clearState guarantees a signed-out start so the flow is deterministic no matter what
+# a previous run left on the device.
+- launchApp:
+    clearState: true
+
+# Generous timeout: Splash holds ~2.8s by design, and a cold start on an emulated
+# x86_64 device in CI is far slower than on a developer machine.
+- extendedWaitUntil:
+    visible: "Get Started"
+    timeout: 60000
+    label: "Splash resolved to Welcome for a signed-out user"
+
+- tapOn: "Get Started"
+
+- extendedWaitUntil:
+    visible: "Phone number"
+    timeout: 30000
+    label: "Login screen reachable"

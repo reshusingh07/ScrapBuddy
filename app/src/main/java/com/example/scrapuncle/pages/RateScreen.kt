@@ -67,9 +67,9 @@ fun RateItemCard(
             .clickable { /* future details */ },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFF9FAFB).copy(alpha = 0.45f)
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
-        border = BorderStroke(1.dp, Color.LightGray.copy(alpha = 0.4f))
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
 
     ) {
         Row(
@@ -82,7 +82,7 @@ fun RateItemCard(
                 modifier = Modifier
                     .size(50.dp)
                     .background(
-                        color = Color(0xFFF5F5F5),
+                        color = MaterialTheme.colorScheme.surface,
                         shape = RoundedCornerShape(12.dp)
                     ),
                 contentAlignment = Alignment.Center
@@ -104,12 +104,12 @@ fun RateItemCard(
                     Text(
                         text = category,
                         style = MaterialTheme.typography.titleSmall,
-                        color = Color.Black.copy(alpha = 0.78f)
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                     Text(
                         text = "Per unit",
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color.Gray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
@@ -132,13 +132,13 @@ fun RateHeader() {
             fontFamily = InterFontFamily,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.SemiBold,
-            color = Color.Black.copy(alpha = 0.8f)
+            color = MaterialTheme.colorScheme.onBackground
         )
         Text(
             text = "Updated scrap prices near you",
             fontFamily = InterFontFamily,
             style = MaterialTheme.typography.bodySmall,
-            color = Color.Gray.copy(alpha = 0.85f)
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -149,7 +149,7 @@ fun PriceChip(price: String) {
     Box(
         modifier = Modifier
             .background(
-                color = Color(0xFFE6F4EA),
+                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.18f),
                 shape = RoundedCornerShape(10.dp)
             )
             .padding(horizontal = 12.dp, vertical = 6.dp)
@@ -159,7 +159,7 @@ fun PriceChip(price: String) {
             text = price,
             fontFamily = InterFontFamily,
             style = MaterialTheme.typography.labelSmall,
-            color = Color(0xFF1B5E20),
+            color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.Medium
         )
     }

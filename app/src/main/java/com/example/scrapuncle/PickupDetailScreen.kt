@@ -53,6 +53,9 @@ import com.example.scrapuncle.compoents.EmptyState
 import com.example.scrapuncle.pages.schedule.formatAddress
 import com.example.scrapuncle.pages.schedule.formatPickupDate
 import com.example.scrapuncle.ui.theme.InterFontFamily
+import com.example.scrapuncle.ui.theme.StatusCancelled
+import com.example.scrapuncle.ui.theme.StatusCompleted
+import com.example.scrapuncle.ui.theme.StatusPending
 import com.example.scrapuncle.ui.theme.lightGreen
 import com.example.scrapuncle.ui.theme.poppinsCategoryFont
 import kotlinx.coroutines.delay
@@ -128,7 +131,7 @@ fun PickupDetailContent(
             fontFamily = InterFontFamily,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.SemiBold,
-            color = Color.Black.copy(alpha = 0.8f),
+            color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center
         )
 
@@ -139,7 +142,7 @@ fun PickupDetailContent(
             modifier = Modifier.fillMaxWidth(),
             fontSize = 13.sp,
             fontFamily = InterFontFamily,
-            color = Color.Black.copy(alpha = 0.62f),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             lineHeight = 20.sp,
             textAlign = TextAlign.Center
         )
@@ -148,7 +151,7 @@ fun PickupDetailContent(
 
         Card(
             shape = RoundedCornerShape(26.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
             elevation = CardDefaults.cardElevation(2.dp),
             modifier = Modifier.padding(horizontal = 8.dp)
         ) {
@@ -206,7 +209,7 @@ fun PickupDetailContent(
                     fontFamily = InterFontFamily,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Color.Gray.copy(alpha = 0.72f),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
                 )
 
@@ -310,7 +313,7 @@ private fun InfoRowDetails(
             fontSize = 12.sp,
             fontWeight = FontWeight.Normal,
             fontFamily = InterFontFamily,
-            color = Color.DarkGray.copy(alpha = 0.82f),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.weight(1f)
         )
         Text(
@@ -318,7 +321,7 @@ private fun InfoRowDetails(
             fontSize = 12.sp,
             fontWeight = FontWeight.Medium,
             fontFamily = InterFontFamily,
-            color = Color.Black.copy(alpha = 0.9f)
+            color = MaterialTheme.colorScheme.onBackground
         )
     }
 }
@@ -326,9 +329,9 @@ private fun InfoRowDetails(
 fun DetailsStatusChip(status: String) {
 
     val (color, icon) = when (status) {
-        "Completed" -> Color(0xFF2E7D32) to Icons.Default.CheckCircle
-        "Cancelled" -> Color(0xFFC62828) to Icons.Default.Cancel
-        else -> Color(0xFF1565C0) to Icons.Default.Schedule
+        "Completed" -> StatusCompleted to Icons.Default.CheckCircle
+        "Cancelled" -> StatusCancelled to Icons.Default.Cancel
+        else -> StatusPending to Icons.Default.Schedule
     }
 
     Row(
@@ -349,7 +352,7 @@ fun DetailsStatusChip(status: String) {
             imageVector = icon,
             contentDescription = null,
             modifier = Modifier.size(13.dp),
-            tint = Color.Black.copy(alpha = 0.8f)
+            tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(Modifier.width(4.dp))
         Text(
@@ -357,7 +360,7 @@ fun DetailsStatusChip(status: String) {
             fontFamily = InterFontFamily,
             fontSize = 11.sp,
             fontWeight = FontWeight.Medium,
-            color = Color.Black.copy(alpha = 0.8f)
+            color = MaterialTheme.colorScheme.onBackground
         )
     }
 }

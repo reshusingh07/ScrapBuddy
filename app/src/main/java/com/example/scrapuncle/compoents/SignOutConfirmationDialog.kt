@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -96,7 +97,7 @@ fun SignOutConfirmationDialog(
                 .padding(horizontal = 46.dp)
                 .scale(scale)
                 .clip(RoundedCornerShape(24.dp))
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(vertical = 24.dp, horizontal = 20.dp)
 
         ) {
@@ -110,7 +111,7 @@ fun SignOutConfirmationDialog(
                     text = "Sign Out",
                     fontWeight = FontWeight.Bold,
                     fontSize = 19.sp,
-                    color = Color.Black.copy(alpha = 0.75f)
+                    color = MaterialTheme.colorScheme.onBackground
                 )
 
                 Spacer(Modifier.height(8.dp))
@@ -119,7 +120,7 @@ fun SignOutConfirmationDialog(
                 Text(
                     text = "Are you sure you want to sign out?",
                     fontSize = 12.sp,
-                    color = Color.Black.copy(alpha = 0.7f)
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Spacer(Modifier.height(26.dp))
@@ -135,7 +136,7 @@ fun SignOutConfirmationDialog(
                             .weight(1f)
                             .height(40.dp)
                             .clip(RoundedCornerShape(8.dp))
-                            .background(Color(0xFFF3F3F3).copy(alpha = 0.82f))
+                            .background(MaterialTheme.colorScheme.surface)
                             .clickable {
                                 visible.value = false
                                 onDismiss()
@@ -146,7 +147,7 @@ fun SignOutConfirmationDialog(
                             text = "Cancel",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Medium,
-                            color = Color.Black.copy(alpha = 0.8f)
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                     }
 
@@ -158,7 +159,7 @@ fun SignOutConfirmationDialog(
                             .weight(1f)
                             .height(40.dp)
                             .clip(RoundedCornerShape(8.dp))
-                            .background(Color(0xFF00A651).copy(alpha = 0.85f))
+                            .background(MaterialTheme.colorScheme.primary)
                             .clickable {
                                 visible.value = false
                                 onConfirm()
@@ -169,7 +170,7 @@ fun SignOutConfirmationDialog(
                             text = "Sign Out",
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color.White
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }

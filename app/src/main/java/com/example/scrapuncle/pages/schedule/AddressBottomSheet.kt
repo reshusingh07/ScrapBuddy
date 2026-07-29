@@ -28,6 +28,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.SwapHoriz
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -81,7 +82,7 @@ fun AddressBottomSheet(
     ModalBottomSheet(
         onDismissRequest = onClose,
         sheetState = sheetState,
-        containerColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.surface,
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 20.dp)
     ) {
         val maxSheetHeight = screenHeight * 0.5f
@@ -110,7 +111,7 @@ fun AddressBottomSheet(
                             fontFamily = poppinsCategoryFont,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = Color.DarkGray.copy(alpha = 0.9f),
+                            color = MaterialTheme.colorScheme.onBackground,
                         )
                     }
                 }
@@ -143,9 +144,9 @@ fun AddressBottomSheet(
                             .padding(horizontal = 30.dp)
                             .heightIn(min = 42.dp),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = Color.White
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant
                         ),
-                        border = BorderStroke((1).dp, Color(0xFF00A651)),
+                        border = BorderStroke((1).dp, MaterialTheme.colorScheme.primary),
                         contentPadding = PaddingValues(
                             horizontal = 12.dp,
                             vertical = 6.dp // small padding for compact look
@@ -160,10 +161,10 @@ fun AddressBottomSheet(
                                     Icons.Default.Add,
                                     contentDescription = null,
                                     modifier = Modifier.size(20.dp),
-                                    tint = Color(0xFF00A651)
+                                    tint = MaterialTheme.colorScheme.primary
                                 )
 
-                                Text("Add New Address",  fontFamily = InterFontFamily, color = Color(0xFF00A651))
+                                Text("Add New Address",  fontFamily = InterFontFamily, color = MaterialTheme.colorScheme.primary)
                             }
                         }
                     }
@@ -211,10 +212,10 @@ fun AddressCardSheet(
             .scale(scale)
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .background(Color(0xFFE8F5E9))      // Light green
+            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f))
             .border(
                 1.dp,
-                if (isSelected) Color(0xFF00A651) else Color.Transparent,
+                if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent,
                 RoundedCornerShape(16.dp)
             )
             .clickable(
@@ -237,7 +238,7 @@ fun AddressCardSheet(
                 Box(
                     modifier = Modifier
                         .background(
-                            Color.White.copy(alpha = 0.6f),
+                            MaterialTheme.colorScheme.surface.copy(alpha = 0.6f),
                             RoundedCornerShape(4.dp)
                         )
                         .padding(horizontal = 4.dp)
@@ -247,7 +248,7 @@ fun AddressCardSheet(
                         fontFamily = InterFontFamily,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.DarkGray.copy(alpha = 0.9f)
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 }
 
@@ -257,7 +258,7 @@ fun AddressCardSheet(
                 Box(
                     modifier = Modifier
                         .background(
-                            Color(0xFFD0F8CE), RoundedCornerShape(6.dp)
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.2f), RoundedCornerShape(6.dp)
                         )
                         .padding(horizontal = 4.dp, vertical = 1.dp)
                 ) {
@@ -266,7 +267,7 @@ fun AddressCardSheet(
                         fontFamily = InterFontFamily,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1B5E20)
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
             }
@@ -279,7 +280,7 @@ fun AddressCardSheet(
                 fontSize = 13.sp,
                 fontFamily = InterFontFamily,
                 fontWeight = FontWeight.SemiBold,
-                color = Color.DarkGray.copy(alpha = 0.9f)
+                color = MaterialTheme.colorScheme.onBackground
             )
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -292,7 +293,7 @@ fun AddressCardSheet(
                     text = "PINCODE: ",
                     fontFamily = InterFontFamily,
                     fontSize = 11.sp,
-                    color = Color.DarkGray.copy(alpha = 0.7f)
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 // PIN CODE LINE
                 Text(
@@ -300,7 +301,7 @@ fun AddressCardSheet(
                     fontFamily = InterFontFamily,
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.DarkGray.copy(alpha = 0.9f)
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
         }

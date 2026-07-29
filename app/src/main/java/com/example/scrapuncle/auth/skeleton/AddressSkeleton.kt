@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -52,7 +53,7 @@ fun AddressShimmer(brush: Brush) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .background(Color(0xFFE8F5E9))
+            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f))
             .padding(12.dp)
     ) {
 
@@ -101,10 +102,12 @@ fun AddressShimmer(brush: Brush) {
 
 @Composable
 fun rememberShimmerBrush(): Brush {
+    // Base -> highlight -> base, both taken from the scheme so skeletons read correctly
+    // on the near-black dark background as well as on white.
     val shimmerColors = listOf(
-        Color(0xFFEDEDED),
-        Color(0xFFF5F5F5),
-        Color(0xFFEDEDED)
+        MaterialTheme.colorScheme.surfaceVariant,
+        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.15f),
+        MaterialTheme.colorScheme.surfaceVariant
     )
 
     val transition = rememberInfiniteTransition(label = "shimmer")

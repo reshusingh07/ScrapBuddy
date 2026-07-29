@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -59,7 +60,7 @@ fun FloatingBottomNavBar(
                 .fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
             shadowElevation = 12.dp,
-            color = Color(0xFF1E1E1E) // dark floating bar
+            color = MaterialTheme.colorScheme.surfaceVariant
         ) {
             Row(
                 modifier = Modifier
@@ -112,7 +113,12 @@ fun FloatingNavItem(
             // "<label> tab" rather than bare "<label>" so it can't collide with
             // screen content ("Check Rates", the Home avatar's "Profile", ...)
             contentDescription = "$label tab",
-            tint = if (selected) Color.White else Color.Gray,
+            // Green for the active tab per the app's accent, muted for the rest.
+            tint = if (selected) {
+                MaterialTheme.colorScheme.primary
+            } else {
+                MaterialTheme.colorScheme.onSurfaceVariant
+            },
             modifier = Modifier.size(18.dp)
         )
     }

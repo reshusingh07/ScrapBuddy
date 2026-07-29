@@ -52,8 +52,8 @@ fun WelcomeScreen(
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFFFFE6C9).copy(alpha = 0.5f),
-                        Color.White.copy(alpha = 0.4f)
+                        MaterialTheme.colorScheme.primary.copy(alpha = 0.10f),
+                        MaterialTheme.colorScheme.background
                     )
                 )
             )
@@ -100,7 +100,7 @@ fun WelcomeScreen(
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
                 lineHeight = 32.sp,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onBackground
             )
 
             Spacer(modifier = Modifier.height(6.dp))
@@ -110,7 +110,7 @@ fun WelcomeScreen(
                 fontSize = 14.sp,
                 fontFamily = poppinsCategoryFont,
                 fontWeight = FontWeight.Medium,
-                color = Color.Gray.copy(alpha = 0.9f)
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
@@ -137,7 +137,7 @@ fun WelcomeScreen(
                     text = "Get Started",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }
