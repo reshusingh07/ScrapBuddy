@@ -44,6 +44,13 @@ jobs:
       - name: Verify Maestro installation
         run: maestro --version
 
+      # Ensure emulator can use KVM acceleration on ubuntu-latest runners
+      - name: Enable KVM permissions
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
       # Start Android emulator, install APK, and run all Maestro flows
       - name: Run Maestro flows
         uses: reactivecircus/android-emulator-runner@v2
