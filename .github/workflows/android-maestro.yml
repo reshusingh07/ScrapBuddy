@@ -55,29 +55,29 @@ jobs:
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           script: |
-            set -eo pipefail
+            set -eu
             adb wait-for-device
-            until [[ "$(adb shell getprop sys.boot_completed | tr -d '\r')" == "1" ]]; do
+            until [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" = "1" ]; do
               sleep 5
             done
 
             adb install -r app/build/outputs/apk/debug/app-debug.apk
 
-            mkdir -p maestro-artifacts
+            mkdir -p maestro-artifacts/logs maestro-artifacts/reports
             maestro test .maestro \
               --format junit \
-              --output maestro-artifacts/maestro-report.xml \
-              --debug-output maestro-artifacts/debug \
-              2>&1 | tee maestro-artifacts/maestro.log
+              --output maestro-artifacts/reports/maestro-report.xml \
+              --debug-output maestro-artifacts \
+              > maestro-artifacts/logs/maestro.log 2>&1
 
-      # Collect screenshots/logs/debug artifacts when Maestro or emulator steps fail
-      - name: Upload Maestro artifacts on failure
-        if: failure()
+            cat maestro-artifacts/logs/maestro.log
+
+      # Upload Maestro debug artifacts (logs/screenshots/hierarchy/flow traces/reports)
+      - name: Upload Maestro artifacts
+        if: always() && hashFiles('maestro-artifacts/**') != ''
         uses: actions/upload-artifact@v4
         with:
-          name: android-maestro-failure-artifacts
-          if-no-files-found: warn
+          name: android-maestro-artifacts
+          if-no-files-found: error
           path: |
             maestro-artifacts/**
-            .maestro/**/screenshots/**
-            app/build/reports/**
