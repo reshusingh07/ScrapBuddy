@@ -10,6 +10,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,22 +41,22 @@ fun SingleSelectChip(
                 brush = if (selected)
                     Brush.verticalGradient(
                         listOf(
-                            Color(0xFF00A651).copy(alpha = 0.75f),
-                            Color(0xFF00A651).copy(alpha = 0.9f) // solid color as gradient
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.75f),
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.9f)
                         )
                     )
                 else
                     Brush.verticalGradient(
                         listOf(
-                            Color.White.copy(alpha = 0.1f),
-                            Color.LightGray.copy(alpha = 0.14f)
+                            MaterialTheme.colorScheme.surfaceVariant,
+                            MaterialTheme.colorScheme.surfaceVariant
                         )
                     ),
                 shape = RoundedCornerShape(12.dp)
             )
             .border(
                 width = 1.dp,
-                color = Color.LightGray.copy(alpha = 0.2f),
+                color = MaterialTheme.colorScheme.outline,
                 shape = RoundedCornerShape(12.dp)
             )
             .clickable(
@@ -66,7 +67,11 @@ fun SingleSelectChip(
             .padding(horizontal = 12.dp, vertical = 6.dp)) {
         Text(
             text = label,
-            color = if (selected) Color.White else Color.DarkGray.copy(alpha = 9f),
+            color = if (selected) {
+                MaterialTheme.colorScheme.onPrimary
+            } else {
+                MaterialTheme.colorScheme.onSurfaceVariant
+            },
             fontWeight = FontWeight.Medium,
             fontSize = 13.sp
         )

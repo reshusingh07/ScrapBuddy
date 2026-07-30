@@ -4,74 +4,41 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
-import com.example.scrapuncle.auth.ui.AddAddressScreen
-import com.example.scrapuncle.auth.ui.CreateProfileScreen
-import com.example.scrapuncle.auth.ui.LoginScreen
-import com.example.scrapuncle.auth.ui.OtpScreen
-import com.example.scrapuncle.auth.ui.WelcomeScreen
-import com.example.scrapuncle.auth.viewmodel.AddAddressViewModel
 import com.example.scrapuncle.auth.viewmodel.AuthViewModel
-import com.example.scrapuncle.auth.viewmodel.ProfileViewModel
-import com.example.scrapuncle.auth.viewmodel.ScheduleViewModel
 import com.example.scrapuncle.navigation.AppNavGraph
-import com.example.scrapuncle.pages.HomeScreen
 import com.example.scrapuncle.ui.theme.ScrapUncleTheme
+import com.example.scrapuncle.ui.theme.ThemeViewModel
 import dagger.hilt.android.AndroidEntryPoint
-
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-
-     override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-         setContent {
-             ScrapUncleTheme {
-//                 Surface(
-//                     modifier = Modifier.fillMaxSize(),
-//                     color = MaterialTheme.colorScheme.background
-//                 ) {
+        setContent {
+            val themeViewModel: ThemeViewModel = hiltViewModel()
+            val themeState by themeViewModel.uiState.collectAsState()
 
-//                     Log.d("CHECK", Firebase.auth.currentUser?.uid ?: "no user")
-                         val navController = rememberNavController()
-                         val authViewModel: AuthViewModel = hiltViewModel()
+            // Draw nothing until the stored theme has been read, so the first painted
+            // frame is always the correct theme instead of the default followed by a
+            // switch. The near-black windowBackground covers this (sub-frame) gap.
+            if (themeState.isLoaded) {
+                ScrapUncleTheme(appTheme = themeState.theme) {
+                    val navController = rememberNavController()
+                    val authViewModel: AuthViewModel = hiltViewModel()
 
-                         AppNavGraph(
-                             navController = navController,
-                             authViewModel = authViewModel
-                         )
-
-
-//                 WelcomeScreen {  }
-
-                    val  profileViewModel : ProfileViewModel = hiltViewModel()
-//
-//                     CreateProfileScreen(
-//                         viewModel = profileViewModel,
-//                         onCreateAccount = {
-//                             navController.navigate("home")
-//                         }
-//                     )
-
-                     val addressViewModel : AddAddressViewModel = hiltViewModel()
-                     val scheduleViewModel: ScheduleViewModel = hiltViewModel()
-
-
-
-
-
-             }
+                    AppNavGraph(
+                        navController = navController,
+                        authViewModel = authViewModel
+                    )
+                }
+            }
         }
     }
 }
-

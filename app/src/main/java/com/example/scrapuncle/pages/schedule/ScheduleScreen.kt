@@ -169,8 +169,8 @@ fun BookNowButton(
     FloatingActionButton(
         onClick = onClick,
         shape = RoundedCornerShape(50),
-        containerColor = Color.Black.copy(alpha = 0.9f),
-        contentColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary,
         modifier = modifier.size(60.dp)  // works ONLY inside outer Box
     ) {
         Icon(
@@ -203,14 +203,14 @@ fun EmptyPickupScreen() {
             fontFamily = InterFontFamily,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = Color.DarkGray
+            color = MaterialTheme.colorScheme.onBackground
         )
         Spacer(modifier = Modifier.height(6.dp))
         Text(
             text = "Schedule your first pickup to get started",
             fontFamily = InterFontFamily,
             style = MaterialTheme.typography.bodyMedium,
-            color = Color.Gray
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -227,13 +227,13 @@ fun RateHeader() {
             fontFamily = InterFontFamily,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.SemiBold,
-            color = Color.Black.copy(alpha = 0.8f)
+            color = MaterialTheme.colorScheme.onBackground
         )
         Text(
             text = "View or schedule your scrap pickup",
             fontFamily = InterFontFamily,
             style = MaterialTheme.typography.bodySmall,
-            color = Color.Gray.copy(alpha = 0.85f)
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }

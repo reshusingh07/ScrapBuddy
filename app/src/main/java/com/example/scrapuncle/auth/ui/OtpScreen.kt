@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -102,7 +103,7 @@ fun OtpScreen(
 
 
     Scaffold(
-        containerColor = Color(0xFFFFFFFF)
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
 
 
@@ -126,7 +127,7 @@ fun OtpScreen(
                         .size(32.dp)
                         .clip(RoundedCornerShape(7.dp))
                         .background(
-                            color = Color.LightGray.copy(alpha = 0.1f),
+                            color = MaterialTheme.colorScheme.surfaceVariant,
                             shape = RoundedCornerShape(7.dp)
                         )
                         .clickable(
@@ -160,7 +161,7 @@ fun OtpScreen(
                 text = "Verification",
                 fontSize = 22.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = Color.Black.copy(alpha = 0.75f)
+                color = MaterialTheme.colorScheme.onBackground
             )
 
             Spacer(Modifier.height(6.dp))
@@ -169,7 +170,7 @@ fun OtpScreen(
                 text = "Enter your OTP code number",
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black.copy(alpha = 0.4f),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
             )
 
@@ -210,7 +211,7 @@ fun OtpScreen(
             ) {
                 if (uiState.isLoading || authState is AuthState.Loading) {
                     CircularProgressIndicator(
-                        color = Color.White.copy(alpha = 0.9f),
+                        color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.9f),
                         strokeWidth = 3.dp,
                         modifier = Modifier.size(22.dp)
                     )
@@ -218,7 +219,7 @@ fun OtpScreen(
                     Text(
                         text = "Verify",
                         fontSize = 15.sp,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             }
@@ -230,7 +231,7 @@ fun OtpScreen(
                 fontFamily = poppinsCategoryFont,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = Color.Black.copy(alpha = 0.4f),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
             )
 
@@ -296,10 +297,10 @@ fun OtpBox(
     isError: Boolean
 ) {
     val borderColor = when {
-        isError -> Color.Red
+        isError -> MaterialTheme.colorScheme.error
         isFocused -> lightGreen
         value.isNotEmpty() -> lightBlack
-        else -> Color.Gray
+        else -> MaterialTheme.colorScheme.outline
     }
 
     Box(

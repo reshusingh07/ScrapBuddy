@@ -130,7 +130,7 @@ fun ProfileScreen(
                     fontFamily = InterFontFamily,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.onBackground
                 )
                 Spacer(modifier = Modifier.height(2.dp))
 
@@ -138,7 +138,7 @@ fun ProfileScreen(
                     text = formatPhoneNumber(uiState.phone),
                     fontFamily = InterFontFamily,
                     fontSize = 14.sp,
-                    color = Color.Gray
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
@@ -198,7 +198,7 @@ fun ProfileScreen(
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     lineHeight = 22.sp,
-                    color = Color(0xFFA8A7A7)
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                 )
                 Text(
                     text = " Version 6.1.23",
@@ -206,7 +206,7 @@ fun ProfileScreen(
                     fontSize = 12.sp,
                     lineHeight = 20.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Color.Gray.copy(alpha = 0.8f)
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                 )
                 Spacer(modifier = Modifier.height(12.dp))
 
@@ -239,10 +239,10 @@ fun MenuCard(title: String, icon: Int, onClick: () -> Unit) {
             .fillMaxWidth()
             .border(
                 width = 1.dp,
-                color = Color.LightGray.copy(alpha = 0.3f),
+                color = androidx.compose.material3.MaterialTheme.colorScheme.outline,
                 shape = RoundedCornerShape(8.dp)
             )
-            .background(Color.LightGray.copy(alpha = 0.15f), RoundedCornerShape(8.dp))
+            .background(androidx.compose.material3.MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(8.dp))
             .clickable { onClick() }
             .padding(vertical = 14.dp, horizontal = 15.dp)
     ) {
@@ -251,7 +251,7 @@ fun MenuCard(title: String, icon: Int, onClick: () -> Unit) {
             Icon(
                 painter = painterResource(id = icon),
                 contentDescription = title,
-                tint = Color(0xFF6A6A6A).copy(alpha = 0.9f),
+                tint = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(20.dp)
             )
 
@@ -261,7 +261,7 @@ fun MenuCard(title: String, icon: Int, onClick: () -> Unit) {
                 text = title,
                 fontFamily = InterFontFamily,
                 fontSize = 13.sp,
-                color = Color(0xFF333333).copy(alpha = 0.85f),
+                color = androidx.compose.material3.MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.W400
             )
 
@@ -270,7 +270,7 @@ fun MenuCard(title: String, icon: Int, onClick: () -> Unit) {
             Icon(
                 painter = painterResource(id = R.drawable.icon_arrow_right_ios),
                 contentDescription = "Next",
-                tint = Color.Gray,
+                tint = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(26.dp)
             )
         }

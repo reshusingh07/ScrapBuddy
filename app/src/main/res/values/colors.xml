@@ -9,4 +9,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="green">#FF3AB34A</color>
 
+    <!-- Window background for the default (Dark) app theme. Keeping this in sync with
+         PureBlackBackground in ui/theme/Color.kt is what prevents a light flash between
+         the window being drawn and Compose painting the first frame. -->
+    <color name="window_background">#FF0A0A0A</color>
+
 </resources>

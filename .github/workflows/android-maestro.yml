@@ -1,0 +1,162 @@
+name: Android Maestro
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+# A superseded runing on the same ref is wasted emulator time.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  android-maestro:
+    runs-on: ubuntu-latest
+    # Two emulator boots happen on a cold AVD cache (snapshot creation + test run),
+    # each with the action's default 600s boot timeout, plus a cold Gradle build.
+    timeout-minutes: 60
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      # No `cache: gradle` here on purpose - the Gradle docs explicitly say to avoid it
+      # when using gradle/actions/setup-gradle, which caches Gradle User Home better.
+      - name: Set up JDK 17
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      # gradlew is committed with mode 100644, so it is not executable after checkout.
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Build debug APK
+        run: ./gradlew :app:assembleDebug
+
+      - name: Install Maestro CLI
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+
+      - name: Verify Maestro installation
+        run: maestro --version
+
+      # Cost optimisation, not a correctness guard: Maestro already exits non-zero with
+      # "Include / Exclude tags did not match any Flows". This just fails in seconds
+      # instead of after a full build and two emulator boots.
+      - name: Verify a ci-tagged flow exists
+        run: |
+          if ! grep -rqE '^[[:space:]]*-[[:space:]]*ci[[:space:]]*$' .maestro; then
+            echo "::error::No Maestro flow is tagged 'ci'; the test step would run zero flows."
+            exit 1
+          fi
+
+      # Required for hardware-accelerated virtualisation on Linux runners.
+      # Snippet is verbatim from the android-emulator-runner README.
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      # --- AVD snapshot cache (android-emulator-runner README pattern) ---------------
+      # Booting a cold AVD costs minutes on every run. Create the AVD once, cache it,
+      # then boot from the cached snapshot on subsequent runs.
+      - name: AVD cache
+        id: avd-cache
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-api34-google_apis-x86_64-pixel_6
+
+      - name: Create AVD snapshot
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          target: google_apis
+          profile: pixel_6
+          force-avd-creation: false
+          # No -no-snapshot-save here: this step exists to write the snapshot.
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          script: echo "Generated AVD snapshot for caching"
+
+      - name: Run Maestro flows
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          target: google_apis
+          profile: pixel_6
+          force-avd-creation: false
+          # -no-snapshot-save keeps the cached snapshot pristine across runs.
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: |
+            # pipefail is essential, not cosmetic: the Maestro output is piped to `tee`,
+            # and without it the pipeline would report tee's exit status and every test
+            # failure would be reported as a green job.
+            set -o pipefail
+
+            mkdir -p maestro-artifacts/logs \
+                     maestro-artifacts/reports \
+                     maestro-artifacts/debug \
+                     maestro-artifacts/test-output
+
+            adb wait-for-device
+
+            # -d permits reinstalling over an already-installed build.
+            adb install -r -d app/build/outputs/apk/debug/app-debug.apk
+
+            adb logcat -c
+
+            # Only `ci`-tagged flows run here. flow.yaml and create-three-pickups.yaml
+            # need a Firebase phone sign-in (SMS OTP) that CI cannot perform, and
+            # create-three-pickups.yaml writes to production Firestore.
+            #
+            #   --test-output-dir      screenshots + video (NOT in --debug-output)
+            #   --debug-output         maestro.log + commands JSON
+            #   --flatten-debug-output no per-run timestamped subfolders (docs: "useful for CI")
+            #   --no-ansi              keeps escape codes out of the log and artifacts
+            #
+            # No `set -e`: the exit status is captured so logcat is still dumped and the
+            # log is still printed before the step fails.
+            status=0
+            maestro test .maestro \
+              --include-tags ci \
+              --format junit \
+              --output maestro-artifacts/reports/maestro-report.xml \
+              --test-output-dir maestro-artifacts/test-output \
+              --debug-output maestro-artifacts/debug \
+              --flatten-debug-output \
+              --no-ansi 2>&1 | tee maestro-artifacts/logs/maestro.log || status=$?
+
+            # Dump the ring buffer either way so crashes and ANRs are triageable.
+            adb logcat -d > maestro-artifacts/logs/logcat.txt 2>&1 || true
+
+            exit "$status"
+
+      # Deliberately no hashFiles() guard: guarding the upload on files already existing
+      # meant an early failure (before anything was written) skipped the upload and left
+      # no diagnostics at all. `warn` keeps the job's real failure as the reported one.
+      - name: Upload Maestro artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: android-maestro-artifacts
+          if-no-files-found: warn
+          retention-days: 14
+          path: maestro-artifacts/**

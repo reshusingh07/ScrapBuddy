@@ -24,6 +24,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -94,22 +95,22 @@ fun PickupDateSelector(
                             brush = if (isSelected)
                                 Brush.verticalGradient(
                                     listOf(
-                                        Color(0xFF00A651).copy(alpha = 0.75f),
-                                        Color(0xFF00A651).copy(alpha = 0.9f) // solid color as gradient
+                                        MaterialTheme.colorScheme.primary.copy(alpha = 0.75f),
+                                        MaterialTheme.colorScheme.primary.copy(alpha = 0.9f)
                                     )
                                 )
                             else
                                 Brush.verticalGradient(
                                     listOf(
-                                        Color.White.copy(alpha = 0.1f),
-                                        Color.LightGray.copy(alpha = 0.14f)
+                                        MaterialTheme.colorScheme.surfaceVariant,
+                                        MaterialTheme.colorScheme.surfaceVariant
                                     )
                                 ),
                             shape = RoundedCornerShape(12.dp)
                         )
                         .border(
                             width = 1.dp,
-                            color = Color.LightGray.copy(alpha = 0.2f),
+                            color = MaterialTheme.colorScheme.outline,
                             shape = RoundedCornerShape(12.dp)
                         )
                         .clickable(
@@ -123,13 +124,13 @@ fun PickupDateSelector(
                             text = date.dayOfWeek.name.take(3)
                                 .lowercase()
                                 .replaceFirstChar { it.uppercase() },
-                            color = if (isSelected) Color.White else Color.Black,
+                            color = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onBackground,
                             fontSize = 13.sp
                         )
                         Text(
                             text = date.dayOfMonth.toString(),
                             fontWeight = FontWeight.Bold,
-                            color = if (isSelected) Color.White else Color.DarkGray.copy(alpha = 9f)
+                            color = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -148,12 +149,12 @@ fun DateDisplayCard(selectedDate: String) {
             .fillMaxWidth()
             .height(38.dp)
             .background(
-                Color.LightGray.copy(alpha = 0.1f),
+                MaterialTheme.colorScheme.surfaceVariant,
                 shape = RoundedCornerShape(10.dp)
             )
             .border(
                 width = 1.dp,
-                color = Color.LightGray.copy(alpha = 0.2f),
+                color = MaterialTheme.colorScheme.outline,
                 shape = RoundedCornerShape(10.dp)
             )
             .padding(horizontal = 15.dp),
@@ -167,14 +168,14 @@ fun DateDisplayCard(selectedDate: String) {
             Text(
                 text = selectedDate,
                 fontFamily = InterFontFamily,
-                color = Color.DarkGray.copy(alpha = 0.7f),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold
             )
             Icon(
                painter = painterResource(id = R.drawable.icon_calendar_today),
                 contentDescription = null,
-                tint =  Color.DarkGray.copy(alpha = 0.7f),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(20.dp)
             )
         }

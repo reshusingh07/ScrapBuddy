@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,10 +36,10 @@ fun AddressCard(
     }
 
     val backgroundColor =
-        Color(0xFF4CAF50).copy(alpha = 0.05f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
 
     val borderColor =
-        Color(0xFF4CAF50).copy(alpha = 0.35f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.35f)
 
     Box(
         modifier = Modifier
@@ -60,7 +61,7 @@ fun AddressCard(
                 fontSize = 14.sp,
                 lineHeight = 21.sp,
                 fontWeight = FontWeight.Medium,
-                color = Color(0xFF212121),
+                color = MaterialTheme.colorScheme.onBackground,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
@@ -74,14 +75,14 @@ fun AddressCard(
                 Text(
                     text = "Pincode ${address.pinCode}",
                     fontSize = 12.sp,
-                    color = Color(0xFF757575),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.weight(1f)
                 )
 
                 Box(
                     modifier = Modifier
                         .background(
-                            color = Color(0xFFDFF5E4),
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.18f),
                             shape = RoundedCornerShape(12.dp)
                         )
                         .padding(horizontal = 8.dp, vertical = 4.dp)
@@ -90,7 +91,7 @@ fun AddressCard(
                         text = "Operational",
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Medium,
-                        color = Color(0xFF2E7D32)
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
             }
