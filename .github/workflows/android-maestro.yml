@@ -6,7 +6,7 @@ on:
     branches:
       - main
 
-# A superseded run on the same ref is wasted emulator time.
+# A superseded runing on the same ref is wasted emulator time.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
