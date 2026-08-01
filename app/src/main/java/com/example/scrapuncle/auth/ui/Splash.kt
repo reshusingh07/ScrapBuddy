@@ -21,21 +21,25 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import com.example.scrapuncle.auth.uistate.AuthDestination
+import com.example.scrapuncle.auth.viewmodel.AuthViewModel
 import com.example.scrapuncle.ui.theme.lightGreen
 import com.example.scrapuncle.ui.theme.lightWhite
 import com.example.scrapuncle.ui.theme.poppinsCategoryFont
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
+
+
+private const val SPLASH_ANIMATION_MILLIS = 2800L
 
 
 @Composable
 fun Splash(
-    onFinished: (Boolean) -> Unit = {}
+    authViewModel: AuthViewModel,
+    onFinished: (AuthDestination) -> Unit
 ) {
 
 
     var startAnimation by remember { mutableStateOf(false) }
-    var fadeOut by remember { mutableStateOf(false) }
 
     // BOUNCE SCALE animation
     val scale by animateFloatAsState(
@@ -51,16 +55,29 @@ fun Splash(
 
     LaunchedEffect(Unit) {
         startAnimation = true
-        delay(2800)        // play main animation for ~2.8s
 
-        val user = FirebaseAuth.getInstance().currentUser
-        val loggedIn = user != null
+        // Ask on every visit, not once per process. Sign-out lands back here while the
+        // Activity-scoped AuthViewModel still holds the previous session's answer.
+        authViewModel.refreshSession()
 
-        onFinished(loggedIn)
+        // Start the lookup first, then spend the animation waiting on it, so the check
+        // is usually finished by the time the animation is. Only a genuinely slow lookup
+        // holds the splash past its normal length, and it is never cut short into a guess.
+        delay(SPLASH_ANIMATION_MILLIS)
 
-     }
+        onFinished(authViewModel.awaitAuthDestination())
+    }
 
 
+    SplashContent(scale = scale, isVisible = startAnimation)
+}
+
+
+@Composable
+private fun SplashContent(
+    scale: Float,
+    isVisible: Boolean
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -78,13 +95,12 @@ fun Splash(
             modifier = Modifier.graphicsLayer {
                 scaleX = scale
                 scaleY = scale
-                alpha = if (startAnimation) 1f else 0f
+                alpha = if (isVisible) 1f else 0f
             }
                 .animateContentSize(animationSpec = tween(900))
         )
 
     }
-
 }
 
 
@@ -92,5 +108,5 @@ fun Splash(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun FontTextingPreview() {
-    Splash{}
+    SplashContent(scale = 1f, isVisible = true)
 }

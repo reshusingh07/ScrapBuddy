@@ -5,15 +5,20 @@ import android.app.Activity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scrapuncle.auth.repo.AuthRepository
+import com.example.scrapuncle.auth.repo.ProfileRepository
+import com.example.scrapuncle.auth.uistate.AuthDestination
 import com.example.scrapuncle.auth.uistate.AuthState
+import com.example.scrapuncle.auth.uistate.toDestination
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.TimeUnit
@@ -22,7 +27,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val repo: AuthRepository
+    private val repo: AuthRepository,
+    private val profileRepository: ProfileRepository
 ) : ViewModel() {
 
     private val auth get() = repo.getAuth()
@@ -40,19 +46,57 @@ class AuthViewModel @Inject constructor(
 
     private var verificationId: String? = null
 
-    init {
-        checkUserSession()
-    }
+    // Deliberately no session check in init: Splash is always the start destination and
+    // drives the check itself. Doing it in both places meant a second, racing read whose
+    // result could land after Splash had already made its decision.
 
-    private fun checkUserSession() {
+    /**
+     * Re-reads who is signed in and whether they have finished onboarding.
+     *
+     * Splash calls this every time it is shown. That matters because Splash is also where
+     * sign-out lands, and this ViewModel is scoped to the Activity — so without a refresh
+     * its last value would still describe the session the user just left.
+     */
+    fun refreshSession() {
+        // Set synchronously rather than inside the coroutine. Callers wait for the next
+        // settled state, and a stale Authenticated left over from a previous session
+        // would otherwise satisfy that wait before the new check had even begun.
+        _uiState.value = AuthState.Loading
+
         viewModelScope.launch {
-            _uiState.value = AuthState.Loading
             val user = auth.currentUser
             _uiState.value = if (user != null) {
-                AuthState.Authenticated(user)
+                authenticatedStateFor(user)
             } else {
                 AuthState.Unauthenticated
             }
+        }
+    }
+
+    /**
+     * Suspends until the session check has settled, then reports where the user belongs.
+     */
+    suspend fun awaitAuthDestination(): AuthDestination =
+        uiState.first { it !is AuthState.Idle && it !is AuthState.Loading }.toDestination()
+
+    /**
+     * Turns a signed-in Firebase user into a fully resolved state.
+     *
+     * Being signed in is only half the answer — a returning user and a first-time user are
+     * indistinguishable at this point until the profile is looked up, so that lookup
+     * happens here, once, for every route into the app.
+     */
+    private suspend fun authenticatedStateFor(user: FirebaseUser): AuthState {
+        return try {
+            AuthState.Authenticated(
+                user = user,
+                hasProfile = profileRepository.hasCompletedProfile()
+            )
+        } catch (e: Exception) {
+            // Never guess when the lookup fails. Assuming "no profile" is exactly what
+            // sends a returning user back to overwrite the profile they already have;
+            // assuming "has profile" strands a new user in an app with no profile.
+            AuthState.Error("Couldn't load your account. Check your connection and try again.")
         }
     }
 
@@ -143,7 +187,7 @@ class AuthViewModel @Inject constructor(
             auth.signInWithCredential(credential).await()
             val user = auth.currentUser
             _uiState.value = if (user != null) {
-                AuthState.Authenticated(user)
+                authenticatedStateFor(user)
             } else {
                 AuthState.Error("Sign-in failed")
             }

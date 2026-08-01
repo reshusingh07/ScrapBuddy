@@ -1,0 +1,156 @@
+appId: com.example.scrapuncle
+name: Login with phone number and OTP
+tags:
+  - auth
+  - login
+env:
+  # The app hard-caps the field at 10 digits and keeps "Continue" disabled until it has
+  # exactly 10 (AuthViewModel.isValidPhone), so the 8-digit "77777777" can never submit.
+  # Registered here as the full 10-digit number the +91 prefix is applied to, i.e. the
+  # Firebase test number is +917777777777.
+  PHONE: "7777777777"
+  OTP: "777777"
+---
+# Full signed-out -> signed-in walk, one step per screen the app actually shows:
+#
+#   Splash  ("Scrap Uncle", ~2.8s + a profile lookup)
+#     -> Welcome        ("Get Started")            -- shown only when nobody is signed in
+#     -> Login          ("Phone number", "+91", "Continue")
+#     -> Otp            ("Verification", 6 boxes, "Verify")
+#     -> Home           ("Hello 👋")               -- if the account already has a profile
+#        or CreateProfile ("Create Your Profile")  -- if it does not
+#
+# The last hop is a genuine fork: OtpScreen routes on AuthState.Authenticated.hasProfile,
+# so this flow waits on either landing screen rather than assuming one. Which one you get
+# depends on whether the test account has been through profile creation before.
+#
+# Requires +91${PHONE} to be registered in Firebase Console as a test phone number with
+# code ${OTP} (Authentication -> Sign-in method -> Phone -> Numbers for testing). Without
+# that, verification hits real SMS and this flow cannot pass. It is deliberately NOT
+# tagged 'ci' for that reason - once the test number is registered on the project the CI
+# emulator uses, adding a 'ci' tag here is safe.
+
+# clearState forces the signed-out route. Without it a device with a live session skips
+# Welcome/Login entirely and lands straight on Home from Splash.
+- launchApp:
+    clearState: true
+
+# ---------------------------------------------------------------------------
+# SPLASH
+# ---------------------------------------------------------------------------
+# (?s) so '.' spans the newline in the "Scrap\nUncle" wordmark.
+- extendedWaitUntil:
+    visible: "(?s)Scrap.*Uncle"
+    timeout: 60000
+    label: "Splash shown on cold start"
+
+# ---------------------------------------------------------------------------
+# WELCOME
+# ---------------------------------------------------------------------------
+# Splash holds ~2.8s by design and only then resolves the auth check, so this wait
+# covers animation + session lookup + a slow cold start.
+- extendedWaitUntil:
+    visible: "Get Started"
+    timeout: 60000
+    label: "Splash resolved to Welcome for a signed-out user"
+# Selectors are matched against the WHOLE text of a node, so a bare prefix will not do:
+# the headline is one buildAnnotatedString node reading
+# "Sell your recyclables\nonline with ScrapUncle!". (?s) lets '.' cross its newline.
+- assertVisible:
+    text: "(?s)Sell your recyclables.*ScrapUncle!"
+    label: "Welcome copy rendered"
+- tapOn: "Get Started"
+
+# ---------------------------------------------------------------------------
+# LOGIN - phone number
+# ---------------------------------------------------------------------------
+- extendedWaitUntil:
+    visible: "Phone number"
+    timeout: 30000
+    label: "Login screen open"
+- assertVisible:
+    text: "\\+91"
+    label: "Country prefix is fixed at +91, so only the 10 digits are typed"
+
+- tapOn:
+    text: "Phone number"
+    label: "Focus the phone field"
+- inputText: ${PHONE}
+- hideKeyboard
+
+# Doubles as the gate check on "Continue": the button is enabled only for exactly 10
+# digits, so a short or rejected input shows up here rather than as a dead tap below.
+- assertVisible:
+    text: ${PHONE}
+    label: "All 10 digits accepted"
+
+- assertVisible:
+    text: "Continue"
+    label: "Continue button ready"
+- tapOn: "Continue"
+
+# ---------------------------------------------------------------------------
+# OTP - verification
+# ---------------------------------------------------------------------------
+# Generous timeout: this waits on Firebase's onCodeSent callback, not just a screen
+# transition. LoginScreen navigates only once AuthState becomes CodeSent.
+- extendedWaitUntil:
+    visible: "Verification"
+    timeout: 45000
+    label: "OTP screen reached (code sent)"
+- assertVisible: "Enter your OTP code number"
+
+# This tap HAS to be a point, and the reason is worth knowing before "improving" it:
+#
+#  * The real input is a single BasicTextField laid over the six boxes at alpha 0
+#    (OtpInput). Compose drops fully transparent nodes from the accessibility tree, so
+#    that field does not exist as far as any Maestro selector is concerned.
+#  * The six boxes themselves are all important-for-accessibility="false", so Maestro
+#    filters them out too. A relative selector like `below: "Enter your OTP code number"`
+#    therefore skips the whole row and resolves to the Verify button underneath it.
+#
+# The field is still touchable, just not findable - hence raw coordinates. 50% is the
+# horizontal centre of the row; 49% is the row's vertical centre (y 1082-1232 of 2340 on
+# the reference device). Recalibrate the y if the screen above the boxes ever changes.
+- tapOn:
+    point: "50%,49%"
+    label: "Focus the hidden OTP input"
+- inputText: ${OTP}
+- hideKeyboard
+
+# Each box renders one digit, so a 6th "7" proves the whole code landed in the field and
+# was not truncated by the OTP_LENGTH filter.
+- assertVisible:
+    text: "7"
+    index: "5"
+    label: "All 6 OTP digits entered"
+
+- tapOn: "Verify"
+
+# ---------------------------------------------------------------------------
+# POST-LOGIN - Home or Create Profile
+# ---------------------------------------------------------------------------
+# OtpScreen sends a profiled account to Home and a brand-new one to CreateProfile. Both
+# are a pass for "login worked"; anything else means sign-in failed.
+- extendedWaitUntil:
+    visible: "Create Your Profile|Hello 👋"
+    timeout: 60000
+    label: "Signed in - landed on Home or Create Profile"
+
+- runFlow:
+    when:
+      visible: "Hello 👋"
+    commands:
+      - assertVisible:
+          text: "Home tab"
+          label: "Bottom nav present - fully into the app"
+      - takeScreenshot: login-returning-user-home
+
+- runFlow:
+    when:
+      visible: "Create Your Profile"
+    commands:
+      - assertVisible:
+          text: "Create Account"
+          label: "Onboarding form for a first-time account"
+      - takeScreenshot: login-new-user-create-profile

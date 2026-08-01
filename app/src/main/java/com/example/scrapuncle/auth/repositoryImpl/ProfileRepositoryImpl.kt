@@ -40,6 +40,19 @@ class ProfileRepositoryImpl @Inject constructor(
         userDocRef().set(toSave).await()
     }
 
+    override suspend fun hasCompletedProfile(): Boolean {
+        val uid = auth.currentUser?.uid ?: return false
+
+        val snapshot = firestore.collection("users").document(uid).get().await()
+
+        // users/{uid} is a shared document — AddressRepository also writes
+        // lastSelectedAddressId onto it — so existence alone is not proof that profile
+        // creation ever happened. Key off fullName instead: it is the one field
+        // ProfileViewModel.validateProfile always requires, so it is present on every
+        // profile the app has ever written and on nothing else.
+        return snapshot.exists() && !snapshot.getString("fullName").isNullOrBlank()
+    }
+
     override fun observeUserProfile(): Flow<Profile?> = callbackFlow {
         val listener = userDocRef().addSnapshotListener { snapshot, error ->
             if (error != null) return@addSnapshotListener
