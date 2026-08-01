@@ -26,6 +26,7 @@ import com.example.scrapuncle.auth.ui.LoginScreen
 import com.example.scrapuncle.auth.ui.OtpScreen
 import com.example.scrapuncle.auth.ui.Splash
 import com.example.scrapuncle.auth.ui.WelcomeScreen
+import com.example.scrapuncle.auth.uistate.AuthDestination
 import com.example.scrapuncle.auth.viewmodel.AuthViewModel
 import com.example.scrapuncle.auth.viewmodel.ScheduleViewModel
 import com.example.scrapuncle.pages.schedule.SchedulePickupScreen
@@ -95,15 +96,18 @@ fun AppNavGraph(
         // SPLASH
         // ---------------------------------------------------------
         composable(Screen.Splash.route) {
-            Splash { loggedIn ->
-                if (loggedIn) {
-                    navController.navigate(Screen.Main.route) {
-                        popUpTo(Screen.Splash.route) { inclusive = true }
-                    }
-                } else {
-                    navController.navigate(Screen.Welcome.route) {
-                        popUpTo(Screen.Splash.route) { inclusive = true }
-                    }
+            Splash(authViewModel = authViewModel) { destination ->
+                val route = when (destination) {
+                    AuthDestination.Home -> Screen.Main.route
+                    // Signed in but never onboarded — e.g. the app was closed part way
+                    // through profile creation. Previously this landed in Main with no
+                    // profile behind it.
+                    AuthDestination.CreateProfile -> Screen.CreateProfile.route
+                    AuthDestination.Welcome -> Screen.Welcome.route
+                }
+
+                navController.navigate(route) {
+                    popUpTo(Screen.Splash.route) { inclusive = true }
                 }
             }
         }
@@ -127,8 +131,19 @@ fun AppNavGraph(
         composable(Screen.Otp.route) {
             OtpScreen(
                 authViewModel = authViewModel,
+                onNavigateToHome = {
+                    navController.navigate(Screen.Main.route) {
+                        // Once signed in there is nothing to go back to: the OTP code has
+                        // been consumed and the phone screen would only start over.
+                        popUpTo(0) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                },
                 onNavigateToCreateProfile = {
-                    navController.navigate(Screen.CreateProfile.route)
+                    navController.navigate(Screen.CreateProfile.route) {
+                        popUpTo(0) { inclusive = true }
+                        launchSingleTop = true
+                    }
                 },
                 onBack = { navController.popBackStack() }
             )
@@ -137,8 +152,12 @@ fun AppNavGraph(
         composable(Screen.CreateProfile.route) {
             CreateProfileScreen(
                 onCreateAccount = {
+                    // Back through Splash rather than straight to Main: it re-reads the
+                    // profile that was just written, which keeps "where does this user
+                    // belong" a question only Splash answers.
                     navController.navigate(Screen.Splash.route) {
-                        popUpTo(Screen.Welcome.route) { inclusive = true }
+                        popUpTo(0) { inclusive = true }
+                        launchSingleTop = true
                     }
                 }
             )

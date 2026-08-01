@@ -66,6 +66,7 @@ const val OTP_LENGTH = 6
 @Composable
 fun OtpScreen(
     authViewModel: AuthViewModel,
+    onNavigateToHome: () -> Unit,
     onNavigateToCreateProfile: () -> Unit,
     onBack: () -> Unit
 ) {
@@ -83,15 +84,16 @@ fun OtpScreen(
 
 
     LaunchedEffect(authState) {
-        when (authState) {
+        when (val state = authState) {
             is AuthState.Authenticated -> {
-                onNavigateToCreateProfile()
-                authViewModel.clearError()
+                // A returning user built their profile when they first signed up. Sending
+                // everyone to CreateProfileScreen made them fill it in all over again, so
+                // the destination follows the profile, not merely the fact of signing in.
+                if (state.hasProfile) onNavigateToHome() else onNavigateToCreateProfile()
             }
 
             is AuthState.Error -> {
-                // 🔥 THIS IS MISSING
-                otpViewModel.onAuthError((authState as AuthState.Error).message)
+                otpViewModel.onAuthError(state.message)
             }
 
             else -> Unit
