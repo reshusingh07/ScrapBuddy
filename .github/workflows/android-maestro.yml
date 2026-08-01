@@ -26,8 +26,9 @@ jobs:
 
       # No `cache: gradle` here on purpose - the Gradle docs explicitly say to avoid it
       # when using gradle/actions/setup-gradle, which caches Gradle User Home better.
+      # v5 is the newest major that exists; @v6 does not resolve and aborts the job here.
       - name: Set up JDK 17
-        uses: actions/setup-java@v6
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: "17"
@@ -105,49 +106,12 @@ jobs:
           # -no-snapshot-save keeps the cached snapshot pristine across runs.
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          script: |
-            # pipefail is essential, not cosmetic: the Maestro output is piped to `tee`,
-            # and without it the pipeline would report tee's exit status and every test
-            # failure would be reported as a green job.
-            set -o pipefail
-
-            mkdir -p maestro-artifacts/logs \
-                     maestro-artifacts/reports \
-                     maestro-artifacts/debug \
-                     maestro-artifacts/test-output
-
-            adb wait-for-device
-
-            # -d permits reinstalling over an already-installed build.
-            adb install -r -d app/build/outputs/apk/debug/app-debug.apk
-
-            adb logcat -c
-
-            # Only `ci`-tagged flows run here. flow.yaml and create-three-pickups.yaml
-            # need a Firebase phone sign-in (SMS OTP) that CI cannot perform, and
-            # create-three-pickups.yaml writes to production Firestore.
-            #
-            #   --test-output-dir      screenshots + video (NOT in --debug-output)
-            #   --debug-output         maestro.log + commands JSON
-            #   --flatten-debug-output no per-run timestamped subfolders (docs: "useful for CI")
-            #   --no-ansi              keeps escape codes out of the log and artifacts
-            #
-            # No `set -e`: the exit status is captured so logcat is still dumped and the
-            # log is still printed before the step fails.
-            status=0
-            maestro test .maestro \
-              --include-tags ci \
-              --format junit \
-              --output maestro-artifacts/reports/maestro-report.xml \
-              --test-output-dir maestro-artifacts/test-output \
-              --debug-output maestro-artifacts/debug \
-              --flatten-debug-output \
-              --no-ansi 2>&1 | tee maestro-artifacts/logs/maestro.log || status=$?
-
-            # Dump the ring buffer either way so crashes and ANRs are triageable.
-            adb logcat -d > maestro-artifacts/logs/logcat.txt 2>&1 || true
-
-            exit "$status"
+          # MUST stay a single line. The action splits this input on newlines and runs
+          # each line in its own `sh -c` (src/script-parser.ts), which shreds `\`
+          # continuations and discards shell state between lines. The real script lives
+          # in the file below, where those things work. Invoked via `bash` rather than
+          # directly because git records the file as 100644, same as gradlew.
+          script: bash .github/scripts/run-maestro-ci.sh
 
       # Deliberately no hashFiles() guard: guarding the upload on files already existing
       # meant an early failure (before anything was written) skipped the upload and left

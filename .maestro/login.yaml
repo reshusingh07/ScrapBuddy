@@ -53,8 +53,11 @@ env:
     visible: "Get Started"
     timeout: 60000
     label: "Splash resolved to Welcome for a signed-out user"
+# Selectors are matched against the WHOLE text of a node, so a bare prefix will not do:
+# the headline is one buildAnnotatedString node reading
+# "Sell your recyclables\nonline with ScrapUncle!". (?s) lets '.' cross its newline.
 - assertVisible:
-    text: "Sell your recyclables"
+    text: "(?s)Sell your recyclables.*ScrapUncle!"
     label: "Welcome copy rendered"
 - tapOn: "Get Started"
 
@@ -97,12 +100,20 @@ env:
     label: "OTP screen reached (code sent)"
 - assertVisible: "Enter your OTP code number"
 
-# The six boxes are decoration. The real input is a single BasicTextField laid over them
-# at alpha 0 (OtpInput), so there is no label or placeholder to match on - the tap has to
-# land on the box row and fall through to the invisible field. If this ever stops finding
-# the row, replace it with a point tap around "50%,45%".
+# This tap HAS to be a point, and the reason is worth knowing before "improving" it:
+#
+#  * The real input is a single BasicTextField laid over the six boxes at alpha 0
+#    (OtpInput). Compose drops fully transparent nodes from the accessibility tree, so
+#    that field does not exist as far as any Maestro selector is concerned.
+#  * The six boxes themselves are all important-for-accessibility="false", so Maestro
+#    filters them out too. A relative selector like `below: "Enter your OTP code number"`
+#    therefore skips the whole row and resolves to the Verify button underneath it.
+#
+# The field is still touchable, just not findable - hence raw coordinates. 50% is the
+# horizontal centre of the row; 49% is the row's vertical centre (y 1082-1232 of 2340 on
+# the reference device). Recalibrate the y if the screen above the boxes ever changes.
 - tapOn:
-    below: "Enter your OTP code number"
+    point: "50%,49%"
     label: "Focus the hidden OTP input"
 - inputText: ${OTP}
 - hideKeyboard
