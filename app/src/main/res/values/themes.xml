@@ -5,12 +5,10 @@
       The app renders entirely in Compose, so this style only covers the frames before
       Compose draws: the cold-start window and activity transitions.
 
-      It intentionally uses the DARK Material parent with a near-black windowBackground
-      because Dark is the app's default theme (see AppTheme.DARK). Previously this
-      extended Material.Light.NoActionBar, which made every screen that does not paint
-      its own background render white even in dark mode.
+      It intentionally uses the Light Material parent with a white windowBackground
+      because Light is the app's default theme (see AppTheme.LIGHT).
     -->
-    <style name="Theme.ScrapUncle" parent="android:Theme.Material.NoActionBar">
+    <style name="Theme.ScrapUncle" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:windowBackground">@color/window_background</item>
     </style>
 

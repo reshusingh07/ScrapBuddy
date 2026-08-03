@@ -267,14 +267,19 @@ fun OtpInput(
     isEnabled: Boolean,
     onOtpChange: (String) -> Unit
 ) {
-    Box {
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
             repeat(OTP_LENGTH) { index ->
-                OtpBox(
-                    value = otp.getOrNull(index)?.toString() ?: "",
-                    isFocused = otp.length == index,
-                    isError = isError
-                )
+                Box(modifier = Modifier.weight(1f)) {
+                    OtpBox(
+                        value = otp.getOrNull(index)?.toString() ?: "",
+                        isFocused = otp.length == index,
+                        isError = isError
+                    )
+                }
             }
         }
 
@@ -307,7 +312,8 @@ fun OtpBox(
 
     Box(
         modifier = Modifier
-            .size(50.dp)
+            .fillMaxWidth()
+            .aspectRatio(1f)
             .border(1.dp, borderColor, RoundedCornerShape(8.dp)),
         contentAlignment = Alignment.Center
     ) {

@@ -11,6 +11,6 @@ import com.example.scrapuncle.data.theme.AppTheme
  * turns true.
  */
 data class ThemeUiState(
-    val theme: AppTheme = AppTheme.DARK,
+    val theme: AppTheme = AppTheme.LIGHT,
     val isLoaded: Boolean = false
 )

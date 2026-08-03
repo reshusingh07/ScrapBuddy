@@ -87,17 +87,17 @@ fun AppearanceScreen(
     val themeOptions = remember {
         listOf(
             ThemeOption(
-                theme = AppTheme.DARK,
-                title = "Dark",
-                description = "Modern dark theme with pure black and green accents (Default)",
-                icon = Icons.Default.DarkMode,
+                theme = AppTheme.LIGHT,
+                title = "Light",
+                description = "Clean light theme with vibrant green touches (Default)",
+                icon = Icons.Default.LightMode,
                 isDefault = true
             ),
             ThemeOption(
-                theme = AppTheme.LIGHT,
-                title = "Light",
-                description = "Clean light theme with vibrant green touches",
-                icon = Icons.Default.LightMode
+                theme = AppTheme.DARK,
+                title = "Dark",
+                description = "Modern dark theme with pure black and green accents",
+                icon = Icons.Default.DarkMode
             ),
             ThemeOption(
                 theme = AppTheme.SYSTEM_DEFAULT,

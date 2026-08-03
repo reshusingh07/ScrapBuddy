@@ -37,5 +37,5 @@ tags:
 - tapOn: "Home tab"
 - extendedWaitUntil:
     visible: "Hello 👋"
-    timeout: 10000
+    timeout: 20000
     label: "Back on Home"

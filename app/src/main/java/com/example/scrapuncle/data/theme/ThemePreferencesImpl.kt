@@ -17,11 +17,11 @@ class ThemePreferencesImpl @Inject constructor(
     }
 
     override val themeStream: Flow<AppTheme> = dataStore.data.map { preferences ->
-        val savedTheme = preferences[PreferencesKeys.KEY_THEME] ?: AppTheme.DARK.name
+        val savedTheme = preferences[PreferencesKeys.KEY_THEME] ?: AppTheme.LIGHT.name
         try {
             AppTheme.valueOf(savedTheme)
         } catch (e: Exception) {
-            AppTheme.DARK
+            AppTheme.LIGHT
         }
     }
 
