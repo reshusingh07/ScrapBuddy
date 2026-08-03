@@ -70,7 +70,7 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun ScrapUncleTheme(
-    appTheme: AppTheme = AppTheme.DARK,
+    appTheme: AppTheme = AppTheme.LIGHT,
     content: @Composable () -> Unit
 ) {
     val darkTheme = when (appTheme) {
